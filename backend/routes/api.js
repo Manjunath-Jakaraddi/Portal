@@ -65,8 +65,8 @@ apiRoute.route('/users')
                         from: 'manjunath180397@gmail.com',
                         to: user.email,
                         subject: 'Your Activation Link',
-                        text: 'Hello ' + user.name + ', thank you for registering at localhost.com. Please click on the following link to complete your activation: http://localhost:8080/activate/' + user.temporarytoken,
-                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>Thank you for registering at localhost.com. Please click on the link below to complete your activation:<br><br><a href="http://localhost:8080/activate/'+user.temporarytoken+'">http://localhost:8080</a>'
+                        text: 'Hello ' + user.name + ', thank you for registering at localhost.com. Please click on the following link to complete your activation: http://evening-escarpment-52396.herokuapp.com/activate/' + user.temporarytoken,
+                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>Thank you for registering at evening-escarpment-52396.herokuapp.com. Please click on the link below to complete your activation:<br><br><a href="http://evening-escarpment-52396.herokuapp.com/activate/'+user.temporarytoken+'">http://evening-escarpment-52396.herokuapp.com</a>'
                   };
                   client.sendMail(email, function(error, info){
                         if(error){
@@ -226,8 +226,8 @@ apiRoute.route('/resend')
                         from: 'manjunath180397@gmail.com',
                         to: user.email,
                         subject: 'Activation Link Request',
-                        text: 'Hello ' + user.name + ', You recently requested a new account activation link. Please click on the following link to complete your activation: https://localhost:8080/activate/' + user.temporarytoken,
-                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>You recently requested a new account activation link. Please click on the link below to complete your activation:<br><br><a href="http://localhost:8080/activate/' + user.temporarytoken + '">http://localhost:8080/activate/</a>'
+                        text: 'Hello ' + user.name + ', You recently requested a new account activation link. Please click on the following link to complete your activation: https://evening-escarpment-52396.herokuapp.com/activate/' + user.temporarytoken,
+                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>You recently requested a new account activation link. Please click on the link below to complete your activation:<br><br><a href="http://evening-escarpment-52396.herokuapp.com/activate/' + user.temporarytoken + '">http://evening-escarpment-52396.herokuapp.com/activate/</a>'
                   };
                   client.sendMail(email, function(error, info){
                         if(error){
@@ -294,8 +294,8 @@ apiRoute.route('/resetpassword')
                         from: 'manjunath180397@gmail.com',
                         to: user.email,
                         subject: 'Request for Reset password',
-                        text: 'Hello ' + user.name + ', You recently request a password reset link. Please click on the link below to reset your password:<br><br><a href="http://localhost:8080/reset/' + user.resettoken,
-                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>You recently request a password reset link. Please click on the link below to reset your password:<br><br><a href="http://localhost:8080/reset/' + user.resettoken + '">http://localhost:8080/reset/</a>'
+                        text: 'Hello ' + user.name + ', You recently request a password reset link. Please click on the link below to reset your password:<br><br><a href="http://evening-escarpment-52396.herokuapp.com/reset/' + user.resettoken,
+                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>You recently request a password reset link. Please click on the link below to reset your password:<br><br><a href="http://evening-escarpment-52396.herokuapp.com/reset/' + user.resettoken + '">http://evening-escarpment-52396.herokuapp.com/reset/</a>'
                   };
                   client.sendMail(email, function(error, info){
                         if(error){

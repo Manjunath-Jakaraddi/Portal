@@ -115,13 +115,16 @@ angular.module('mainController',['authServices','userServices'])
             $location.path('/');
           } else {
             app.isLoggedIn = true;
-            //
-            app.loadme = true;
-            //
-            app.username = data.data.username;
+            app.username = data.data.username
+            app.name = data.data.name;
             var checkLoginStatus = data.data.username;
             app.email = data.data.email;
-            // Missing about permissions
+            User.getPermission().then(function (data) {
+              if (data.data.permission) {
+                app.authorized = data.data.permission;
+                app.loadme = true;
+              }
+            });
           }
         });
       } else {
@@ -142,11 +145,11 @@ angular.module('mainController',['authServices','userServices'])
 
         Auth.login(app.loginData).then(function (data) {
             if(data.data.success) {
-                app.loading = false;
                 $scope.alert = 'alert alert-success';
                 app.successMsg = data.data.message + '...Redirecting';
                 app.token = data.data.token;
                 $timeout(function () {
+                    app.loading = false;
                     $location.path('/');
                     app.loginData = null;
                     app.successMsg = false;

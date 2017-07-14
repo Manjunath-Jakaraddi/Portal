@@ -25,74 +25,85 @@ apiRoute.use(bodyParser.json());
 
 
 apiRoute.route('/users')
-.post(function (req,res,next) {
-    var user = new User();
-    user.name = req.body.name;
-    user.username = req.body.username;
-    user.password = req.body.password;
-    user.email = req.body.email;
-    user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, config.secretKey, { expiresIn: '24h' });
-    if (req.body.username === null || req.body.username === '' || req.body.password === null || req.body.password === '' || req.body.email === null || req.body.email === '' || req.body.name === null || req.body.name === '') {
-        res.json({ success: false, message: 'Ensure all fields have been provided'});
-    } else {
-      user.save(function(err) {
-              if (err) {
-                  if (err.errors !== undefined) {
-                      if (err.errors.name) {
-                          res.json({ success: false, message: err.errors.name.message });
-                      } else if (err.errors.email) {
-                          res.json({ success: false, message: err.errors.email.message });
-                      } else if (err.errors.username) {
-                          res.json({ success: false, message: err.errors.username.message });
-                      } else if (err.errors.password) {
-                          res.json({ success: false, message: err.errors.password.message });
-                      } else {
-                          res.json({ success: false, message: err });
-                      }
-                  } else if (err) {
-                      if (err.code == 11000) {
+.post(function (req, res, next) {
+  User.findOne({ username: req.body.username}).exec(function (err,user) {
+    if(err) {
+      res.json({ success: false, message: err});
+    } else if (user) {
+      user.name = req.body.name;
+      user.password = req.body.password;
+      user.email = req.body.email;
+      user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, config.secretKey, { expiresIn: '24h' });
+      if (req.body.password === null || req.body.password === '' || req.body.email === null || req.body.email === '' || req.body.name === '' || req.body.name === null) {
+          res.json({ success: false, message: 'Ensure all fields have been provided'});
+      } else if (user.registered === true) {
+          res.json({ success: false, message: 'Account already registered!'});
+      } else  {
+        user.registered = true;
+        user.save(function(err) {
+                if (err) {
+                    if (err.errors !== undefined) {
+                        if (err.errors.name) {
+                            res.json({ success: false, message: err.errors.name.message });
+                        } else if (err.errors.email) {
+                            res.json({ success: false, message: err.errors.email.message });
+                        } else if (err.errors.password) {
+                            res.json({ success: false, message: err.errors.password.message });
+                        } else {
+                            res.json({ success: false, message: err });
+                        }
+                    } else if (err) {
+                        if (err.code == 11000) {
                           if (err.errmsg.includes("username")) {
-                              res.json({ success: false, message: 'That username is already taken' });
-                          } else if (err.errmsg.includes("email")) {
-                              res.json({ success: false, message: 'That e-mail is already taken' });
-                          }
-                      } else {
-                          res.json({ success: false, message: err });
-                      }
-                  }
-              } else {
-                  var email = {
-                        from: 'manjunath180397@gmail.com',
-                        to: user.email,
-                        subject: 'Your Activation Link',
-                        text: 'Hello ' + user.name + ', thank you for registering at localhost.com. Please click on the following link to complete your activation: http://evening-escarpment-52396.herokuapp.com/activate/' + user.temporarytoken,
-                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>Thank you for registering at evening-escarpment-52396.herokuapp.com. Please click on the link below to complete your activation:<br><br><a href="http://evening-escarpment-52396.herokuapp.com/activate/'+user.temporarytoken+'">http://evening-escarpment-52396.herokuapp.com</a>'
-                  };
-                  client.sendMail(email, function(error, info){
-                        if(error){
-                            console.log(error);
-                        }else{
-                            console.log('Message sent: ' + info.response);
-                            console.log(user.email);
-                        };
-                  });
-                  res.json({ success: true, message: 'Account registered! Please check your e-mail for activation link.' });
-              }
-        });
+                             res.json({ success: false, message: 'That username is already taken' });
+                           } else if (err.errmsg.includes("email")) {
+                                res.json({ success: false, message: 'That e-mail is already taken' });
+                            }
+                        } else {
+                            res.json({ success: false, message: err });
+                        }
+                    }
+                } else {
+                    var email = {
+                          from: 'manjunath180397@gmail.com',
+                          to: user.email,
+                          subject: 'Your Activation Link',
+                          text: 'Hello ' + user.name + ', thank you for registering at localhost.com. Please click on the following link to complete your activation: http://'+ config.URL + '/activate/' + user.temporarytoken,
+                          html: 'Hello<strong> ' + user.name + '</strong>,<br><br>Thank you for registering at '+ config.URL + '. Please click on the link below to complete your activation:<br><br><a href="http://'+ config.URL + '/activate/'+user.temporarytoken+'">http://'+ config.URL + '</a>'
+                    };
+                    client.sendMail(email, function(error, info){
+                          if(error){
+                              console.log(error);
+                          }else{
+                              console.log('Message sent: ' + info.response);
+                              console.log(user.email);
+                          };
+                    });
+                    res.json({ success: true, message: 'Account registered! Please check your e-mail for activation link.' });
+                }
+          });
+      }
+    } else {
+      res.json({ success: false, message: 'USN not found!'});
     }
+  });
 });
 
 
 apiRoute.route('/checkusername')
 .post(function (req, res, next) {
-    User.findOne({ username: req.body.username }).select('username email').exec(function (err,user) {
+    User.findOne({ username: req.body.username }).select('username registered').exec(function (err,user) {
       if (err) {
             res.json({ success: false, message: err});
         } else {
             if(user) {
-              res.json({ success: false, message: 'That username is already taken!'});
+              if (user.registered === true) {
+                res.json({ success: false, message: 'USN already registered!'});
+              } else {
+                res.json({ success: true, message: 'Valid USN'});
+              }
             } else {
-              res.json({ success: true, message: 'Valid Username'});
+              res.json({ success: false, message: 'Invalid USN!'});
             }
         }
     });
@@ -117,15 +128,17 @@ apiRoute.route('/checkEmail')
 
 apiRoute.route('/authenticate')
 .post(function (req, res, next) {
-    var loginUser = (req.body.username).toLowerCase();
-    User.findOne({ username: loginUser }).select('email username password active').exec(function (err, user) {
+    var loginUser = req.body.username;
+    User.findOne({ username: loginUser }).select('email username password active registered').exec(function (err, user) {
         if(err) {
           res.json({ success: false, message: err});
         } else {
             if(!user) {
                 res.json({ success: false, message: 'Username does not exists!'});
             } else if(user) {
-                if(!req.body.password) {
+                if (user.registered === false) {
+                  res.json({ success: false, message: 'User not yet registered!'});
+                } else if(!req.body.password) {
                     res.json({ success: false, message: 'Password not provided!'});
                 } else {
                     var validPassword = user.comparePassword(req.body.password);
@@ -134,7 +147,7 @@ apiRoute.route('/authenticate')
                     } else if (!user.active) {
                         res.json({ success: false, message: 'Accout not yet activated.Please check your email for the activation Link.',expired: true});
                     } else {
-                      var token = jwt.sign({ username: user.username, email: user.email}, config.secretKey, {expiresIn: '30m'});
+                      var token = jwt.sign({ username: user.username, email: user.email}, config.secretKey, {expiresIn: '24h'});
                       res.json({ success: true, message: 'User Authenticated',token: token});
                     }
                 }
@@ -226,8 +239,8 @@ apiRoute.route('/resend')
                         from: 'manjunath180397@gmail.com',
                         to: user.email,
                         subject: 'Activation Link Request',
-                        text: 'Hello ' + user.name + ', You recently requested a new account activation link. Please click on the following link to complete your activation: https://evening-escarpment-52396.herokuapp.com/activate/' + user.temporarytoken,
-                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>You recently requested a new account activation link. Please click on the link below to complete your activation:<br><br><a href="http://evening-escarpment-52396.herokuapp.com/activate/' + user.temporarytoken + '">http://evening-escarpment-52396.herokuapp.com/activate/</a>'
+                        text: 'Hello ' + user.name + ', You recently requested a new account activation link. Please click on the following link to complete your activation: https://'+ config.URL + '/activate/' + user.temporarytoken,
+                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>You recently requested a new account activation link. Please click on the link below to complete your activation:<br><br><a href="http://'+ config.URL + '/activate/' + user.temporarytoken + '">http://'+ config.URL + '/activate/</a>'
                   };
                   client.sendMail(email, function(error, info){
                         if(error){
@@ -276,7 +289,7 @@ apiRoute.route('/resetusername/:email')
 
 apiRoute.route('/resetpassword')
 .put(function (req, res, next) {
-  User.findOne({ username: req.body.username}).select('name username email active resettoken').exec(function (err, user) {
+  User.findOne({ username: req.body.username}).select('name username email active resettoken registered').exec(function (err, user) {
       if(err) {
         res.json({ success: false, message: err});
       } else {
@@ -284,6 +297,8 @@ apiRoute.route('/resetpassword')
             res.json({ success: false, message: 'Username was not found!'});
         } else if(!user.active) {
             res.json({ success: false, message: 'Account not yet activated'});
+        } else if (user.registered === false) {
+            res.json({ success: false, message: 'Account not yet registered!'});
         } else {
             user.resettoken = jwt.sign({ username: user.username, email: user.email }, config.secretKey, {expiresIn: '24h'});
             user.save(function (err) {
@@ -294,8 +309,8 @@ apiRoute.route('/resetpassword')
                         from: 'manjunath180397@gmail.com',
                         to: user.email,
                         subject: 'Request for Reset password',
-                        text: 'Hello ' + user.name + ', You recently request a password reset link. Please click on the link below to reset your password:<br><br><a href="http://evening-escarpment-52396.herokuapp.com/reset/' + user.resettoken,
-                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>You recently request a password reset link. Please click on the link below to reset your password:<br><br><a href="http://evening-escarpment-52396.herokuapp.com/reset/' + user.resettoken + '">http://evening-escarpment-52396.herokuapp.com/reset/</a>'
+                        text: 'Hello ' + user.name + ', You recently request a password reset link. Please click on the link below to reset your password:<br><br><a href="http://'+ config.URL + '/reset/' + user.resettoken,
+                        html: 'Hello<strong> ' + user.name + '</strong>,<br><br>You recently request a password reset link. Please click on the link below to reset your password:<br><br><a href="http://'+ config.URL + '/reset/' + user.resettoken + '">http://'+ config.URL + '/reset/</a>'
                   };
                   client.sendMail(email, function(error, info){
                         if(error){
@@ -353,8 +368,8 @@ apiRoute.route('/savepassword')
                       from: 'manjunath180397@gmail.com',
                       to: user.email,
                       subject: 'Password reset Successful',
-                      text: 'Hello ' + user.name + ', This e-mail is to notify you that your password was recently reset at localhost.com',
-                      html: 'Hello<strong> ' + user.name + '</strong>,<br><br>This e-mail is to notify you that your password was recently reset at localhost.com'
+                      text: 'Hello ' + user.name + ', This e-mail is to notify you that your password was recently reset at '+ config.URL,
+                      html: 'Hello<strong> ' + user.name + '</strong>,<br><br>This e-mail is to notify you that your password was recently reset at '+ config.URL
                 };
                 client.sendMail(email, function(error, info){
                       if(error){
@@ -389,10 +404,63 @@ var verifyuser = function (req, res, next) {
     }
 };
 
+var verifystudent = function (req, res, next) {
+  User.findOne({ username: req.decoded.username}, function (err, user) {
+    if (err) {
+      res.json({ success: false, message: err});
+    } else if (user){
+      if ( user.permission !== 'student') {
+        res.json({ success: false, message: 'Insuffcient Permissions!'});
+      } else {
+        next();
+      }
+    } else {
+      res.json({ success: false, message: 'User not found!'});
+    }
+  });
+};
+var verifyteacher = function (req, res, next) {
+  User.findOne({ username: req.decoded.username}, function (err, user) {
+    if (err) {
+      res.json({ success: false, message: err});
+    } else if (user) {
+      if ( user.permission !== 'teacher') {
+        res.json({ success: false, message: 'Insuffcient Permissions!'});
+      } else {
+        next();
+      }
+    } else {
+      res.json({ success: false, message: 'User not found!'});
+    }
+  });
+};
+var verifyadmin = function (req, res, next) {
+  User.findOne({ username: req.decoded.username}, function (err, user) {
+    if (err) {
+      res.json({ success: false, message: err});
+    } else if (user) {
+      if ( user.permission !== 'admin') {
+        res.json({ success: false, message: 'Insuffcient Permissions!'});
+      } else {
+        next();
+      }
+    } else {
+      res.json({ success: false, message: 'User not found!'})
+    }
+  });
+};
+
 apiRoute.route('/me')
 .all(verifyuser)
 .post(function (req, res, next) {
-  res.send(req.decoded);
+  User.findOne({ username: req.decoded.username}).select('name').exec(function (err,user) {
+    if (err) {
+      res.json({ success: false, message: err });
+    } else {
+      req.decoded.name = user.name;
+      res.send(req.decoded);
+    }
+  })
 });
 
 apiRoute.route('/renewToken/:username')
@@ -411,4 +479,51 @@ apiRoute.route('/renewToken/:username')
       }
     });
 });
+
+apiRoute.route('/permission')
+.all(verifyuser)
+.get(function (req, res, next) {
+  User.findOne({ username: req.decoded.username} , function (err,user) {
+    if (err) {
+      res.json({ success: false, message: 'No user was found!'});
+    } else {
+      res.json({ success: true, permission: user.permission });
+    }
+  });
+});
+
+
+apiRoute.route('/management')
+.all(verifyuser,verifyadmin)
+.get(function (req, res, next) {
+  User.find({}, function (err,users) {
+    if (err) {
+      res.json({ success: false, message: err});
+    } else {
+      res.json({ success: true, users: users, permission: 'admin' });
+    }
+  });
+});
+
+apiRoute.route('/changePermission')
+.all(verifyuser,verifyadmin)
+.put(function (req, res) {
+  User.findOne({ username: req.body.username }).select('permission').exec(function (err, user) {
+    if (err) {
+      res.json({ success: false, message: err });
+    } else if (user) {
+      user.permission = req.body.permission;
+      user.save(function (err) {
+        if (err) {
+          res.json({ success: false, message: err });
+        } else {
+          res.json({ success: true });
+        }
+      });
+    } else {
+      res.json({ success: false, message: 'User not found!'});
+    }
+  });
+});
+
 module.exports = apiRoute;

@@ -20,7 +20,7 @@ var nameValidator = [
 var usernameValidator = [
     validate({
         validator: 'isLength',
-        arguments: [3, 25],
+        arguments: [10, 20],
         message: 'Username should be between {ARGS[0]} and {ARGS[1]} characters'
     }),
     validate({
@@ -56,14 +56,15 @@ var passwordValidator = [
 ];
 
 var UserSchema = new Schema({
-  name            :     { type: String, required: true, validate: nameValidator},
-  username        :     { type: String, required: true, unique: true, lowercase: true, validate: usernameValidator},
-  email           :     { type: String, required: true, unique: true, validate: emailValidator},
-  password        :     { type:String, required: true, validate: passwordValidator, select: false},
+  name            :     { type: String, required: true, default: '', validate: nameValidator},
+  username        :     { type: String, required: true, unique: true, validate: usernameValidator},
+  email           :     { type: String, required: true, default: '', unique: true, validate: emailValidator},
+  password        :     { type:String, required: true, default: '', validate: passwordValidator, select: false},
   active          :     { type: Boolean, required: true, default: false },
-  temporarytoken  :     { type: String, required: true },
-  resettoken      :     { type: String, required: false }
-  // category        :     { type: String, required: true }
+  registered      :     { type: Boolean, required: true, default: false },
+  temporarytoken  :     { type: String, required: true, default: ''},
+  resettoken      :     { type: String, required: false },
+  permission      :     { type: String, required: true, default: 'student' }
 });
 
 UserSchema.pre('save', function(next) {

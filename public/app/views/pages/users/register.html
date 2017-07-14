@@ -66,8 +66,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div ng-class="{ 'has-success':(regForm.username.$valid && !regForm.username.$pristine && !register.usernameInvalid), 'has-error':(!regForm.username.$valid && !regForm.username.$pristine) || (!regForm.username.$valid && regForm.$submitted) || register.usernameInvalid }">
-                                    <label>Username:</label>
-                                    <input ng-disabled="register.disabled" class="form-control" type="text" name="username" placeholder="Username *" ng-model="register.regData.username" ng-minlength="3" ng-maxlength="25" ng-pattern="/^(?!.*?[\W])(?=.*?[a-zA-Z]|=.*?[A-Z]).{3,16}$/" ng-blur="register.checkUsername(regData);" required>
+                                    <label>USN:</label>
+                                    <input ng-disabled="register.disabled" class="form-control" type="text" name="username" placeholder="USN *" ng-model="register.regData.username" ng-minlength="3" ng-maxlength="25" ng-pattern="/^(?!.*?[\W])(?=.*?[a-zA-Z]|=.*?[A-Z]).{3,16}$/" ng-blur="register.checkUsername(regData);" required>
                                     <p class="help-block" ng-show="(!regForm.username.$pristine && regForm.username.$error.required) || (regForm.$submitted && regForm.username.$error.required)">This field is required</p>
                                     <span ng-show="register.checkingUsername && regForm.username.$valid" class="glyphicon glyphicon-repeat"></span>
                                     <p class="help-block" ng-show="register.usernameMsg && !regForm.username.$error.required && regForm.username.$valid">{{ register.usernameMsg }}</p>

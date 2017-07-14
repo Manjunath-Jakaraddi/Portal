@@ -21,6 +21,9 @@
     <script src="app/controllers/userCtrl.js"></script>
     <script src="app/controllers/mainCtrl.js"></script>
     <script src="app/controllers/emailCtrl.js"></script>
+    <script src="app/controllers/studentCtrl.js"></script>
+    <script src="app/controllers/teacherCtrl.js"></script>
+    <script src="app/controllers/managementCtrl.js"></script>
 
     <!-- Angular Services -->
     <script src="app/services/userservices.js"></script>
@@ -59,6 +62,7 @@
             <li class="">
                 <a class="page-scroll" href="/">Home</a>
             </li>
+
             <li>
                 <a ng-show="!main.isLoggedIn" class="page-scroll" href="/login">Login</a>
             </li>
@@ -69,7 +73,16 @@
                 <a ng-show="main.isLoggedIn" class="page-scroll" href="#" ng-click="main.logout();">Logout</a>
             </li>
             <li>
-                <a ng-show="main.isLoggedIn" class="page-scroll" href="/profile">Hello {{ main.username}}</a>
+                <a ng-show="main.isLoggedIn" class="page-scroll" href="/profile">Profile</a>
+            </li>
+            <li>
+                <a ng-show="main.isLoggedIn&&main.authorized === 'student'" class="page-scroll" href="/student">student</a>
+            </li>
+            <li>
+                <a ng-show="main.isLoggedIn&&main.authorized === 'teacher'" class="page-scroll" href="/teacher">teacher</a>
+            </li>
+            <li>
+                <a ng-show="main.isLoggedIn&&main.authorized === 'admin'" class="page-scroll" href="/management">Management</a>
             </li>
           </ul>
         </div>

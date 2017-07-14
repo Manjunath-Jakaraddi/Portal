@@ -73,6 +73,33 @@ var app = angular.module('AppRoutes',['ngRoute'])
         authenticated: false
     })
 
+    // Route: Student Page
+    .when('/student', {
+        templateUrl: 'app/views/pages/student/student.html',
+        controller: 'studentCtrl',
+        controllerAs: 'student',
+        authenticated: true,
+        permission: 'student'
+    })
+
+    // Route: Teacher's Page
+    .when('/teacher', {
+        templateUrl: 'app/views/pages/teacher/teacher.html',
+        controller: 'teacherCtrl',
+        controllerAs: 'teacher',
+        authenticated: true,
+        permission: 'teacher'
+    })
+
+    // Route: Management Page
+    .when('/management', {
+        templateUrl: 'app/views/pages/management/management.html',
+        controller: 'managementCtrl',
+        controllerAs: 'management',
+        authenticated: true,
+        permission: 'admin'
+    })
+
     .otherwise({ redirectTo: '/' });
     $locationProvider.html5Mode({ enabled: true, requireBase: false });
 }]);
@@ -84,7 +111,14 @@ app.run(['$rootScope','Auth','$location','User',function ($rootScope, Auth, $loc
             if(!Auth.isLoggedIn()) {
               event.preventDefault();
               $location.path('/');
-            }// one more else if for permission
+            } else if (next.$$route.permission) {
+              User.getPermission().then(function (data) {
+                if (next.$$route.permission !== data.data.permission) {
+                  event.preventDefault();
+                  $location.path('/');
+                }
+              });
+            }
           } else if(next.$$route.authenticated === false) {
               if(Auth.isLoggedIn()) {
                 event.preventDefault();

@@ -1,7 +1,9 @@
 module.exports = {
-  'mongoUrl'            : 'mongodb://manju:manju@ds151062.mlab.com:51062/manjurvce',
-  'secretKey'           : '12345-67890-09876-54321',
-  'mailingcredentials'  : { 'email': 'manjunath180397@gmail.com', 'password': 'Manju@180397'}
+  'mongoUrl'            :   'mongodb://manju:manju@ds151062.mlab.com:51062/manjurvce',
+  'secretKey'           :   '12345-67890-09876-54321',
+  'mailingcredentials'  :   { 'email': 'manjunath180397@gmail.com', 'password': 'Manju@180397'},
+  'URL'                 :   'evening-escarpment-52396'
+  // evening-escarpment-52396
 }
 
 //                          Mailing Templates

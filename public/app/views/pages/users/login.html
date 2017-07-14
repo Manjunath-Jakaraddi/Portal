@@ -16,8 +16,8 @@
                         <div class="col-lg-10 col-lg-offset-1">
 
                             <div class="form-group">
-                                <label>Username:</label>
-                                <input ng-disabled="main.disabled" class="form-control" type="text" name="username" placeholder="username *" ng-model="main.loginData.username" autocomplete="off">
+                                <label>USN:</label>
+                                <input ng-disabled="main.disabled" class="form-control" type="text" name="username" placeholder="USN *" ng-model="main.loginData.username" autocomplete="off">
                             </div>
 
                             <div class="form-group">
@@ -51,7 +51,6 @@
 
         <div class="jumbotron text-center" ng-show="main.loading">
             <span class="glyphicon glyphicon-repeat spinner"></span>
-            <p>Loading....</p>
         </div>
 
         <div class="row show-hide-message" ng-show="main.successMsg || main.errorMsg">

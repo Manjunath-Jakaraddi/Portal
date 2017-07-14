@@ -1,0 +1,7 @@
+applications:
+  - name: portalmanju
+    memory: 256M
+    domain: mybluemix.net
+    buildpack: nodejs_buildpack
+    disk-quota: 512M
+    command: node server.js

@@ -90,6 +90,14 @@ var app = angular.module('AppRoutes',['ngRoute'])
         authenticated: true,
         permission: 'teacher'
     })
+    // Route: Teacher's Page
+    .when('/teacher/createsubject', {
+        templateUrl: 'app/views/pages/teacher/createsubject.html',
+        controller: 'teacherCtrl',
+        controllerAs: 'teacher',
+        authenticated: true,
+        permission: 'teacher'
+    })
 
     // Route: Management Page
     .when('/management', {

@@ -137,7 +137,7 @@ angular.module('mainController',['authServices','userServices'])
     });
 
     app.doLogin = function (loginData) {
-        app.loading = true;
+        $('.loading-manju').loading({ base: 0.2 });
         app.errorMsg = false;
         app.expired = false;
         app.disabled = true;
@@ -149,7 +149,7 @@ angular.module('mainController',['authServices','userServices'])
                 app.successMsg = data.data.message + '...Redirecting';
                 app.token = data.data.token;
                 $timeout(function () {
-                    app.loading = false;
+                    $('.loading-manju').loading({ destroy: true });
                     $location.path('/');
                     app.loginData = null;
                     app.successMsg = false;
@@ -159,11 +159,11 @@ angular.module('mainController',['authServices','userServices'])
             } else {
                 if(data.data.expired) {
                     app.expired = true;
-                    app.loading = false;
+                    $('.loading-manju').loading({ destroy: true });
                     $scope.alert = 'alert alert-danger';
                     app.errorMsg = data.data.message;
                 } else {
-                    app.loading = false;
+                    $('.loading-manju').loading({ destroy: true });
                     app.disabled = false;
                     $scope.alert = 'alert alert-danger';
                     app.errorMsg = data.data.message;

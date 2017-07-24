@@ -1,8 +1,13 @@
-var mongoose   =   require('mongoose');
-var Schema     =   mongoose.Schema;
-var bcrypt     =   require('bcrypt-nodejs');
-var titlize    =   require('mongoose-title-case');
-var validate   =   require('mongoose-validator');
+var mongoose          =     require('mongoose');
+var Schema            =     mongoose.Schema;
+var bcrypt            =     require('bcrypt-nodejs');
+var titlize           =     require('mongoose-title-case');
+var validate          =     require('mongoose-validator');
+var Semester          =     require('./semester.js');
+var teacher           =     require('./teacher.js');
+
+var SemSchema = Semester.SemSchema;
+var SubjectDetailsSchema  = teacher.SubjectDetailsSchema;
 
 var nameValidator = [
     validate({
@@ -56,15 +61,17 @@ var passwordValidator = [
 ];
 
 var UserSchema = new Schema({
-  name            :     { type: String, required: true, default: '', validate: nameValidator},
+  name            :     { type: String, default: false, validate: nameValidator},
   username        :     { type: String, required: true, unique: true, validate: usernameValidator},
-  email           :     { type: String, required: true, default: '', unique: true, validate: emailValidator},
-  password        :     { type:String, required: true, default: '', validate: passwordValidator, select: false},
-  active          :     { type: Boolean, required: true, default: false },
-  registered      :     { type: Boolean, required: true, default: false },
-  temporarytoken  :     { type: String, required: true, default: ''},
-  resettoken      :     { type: String, required: false },
-  permission      :     { type: String, required: true, default: 'student' }
+  email           :     { type: String, default: false, unique: true, validate: emailValidator},
+  password        :     { type:String, default: false, validate: passwordValidator, select: false},
+  active          :     { type: Boolean, default: false },
+  registered      :     { type: Boolean, default: false },
+  temporarytoken  :     { type: String, default: false},
+  resettoken      :     { type: String },
+  permission      :     { type: String, default: 'student' },
+  semesters       :     [ SemSchema ],
+  subjectdetails  :     [ SubjectDetailsSchema ]
 });
 
 UserSchema.pre('save', function(next) {

@@ -1,5 +1,5 @@
-angular.module('studentController',[])
-.controller('studentCtrl',[function () {
+angular.module('studentController',['studentServices'])
+.controller('studentCtrl', ['Student', function (Student) {
   var student = this;
-  
+
 }]);

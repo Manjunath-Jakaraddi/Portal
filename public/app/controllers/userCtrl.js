@@ -5,28 +5,28 @@ angular.module('userControllers',['userServices'])
     var app = this;
     app.regUser = function (regData, valid, confirmed) {
       app.disabled = true;
-      app.loading = true;
+      $('.loading-manju').loading({ base: 0.2 });
       app.errorMsg = false;
 
       if(valid && confirmed) {
         app.regData.name = app.regData.firstName + " " + app.regData.lastName;
         User.create(app.regData).then(function (data) {
           if(data.data.success) {
-            app.loading = false;
+            $('.loading-manju').loading({ destroy: true });
             $scope.alert = 'alert alert-success';
             app.successMsg = data.data.message + "...Redirecting";
             $timeout(function () {
                 $location.path('/login');
             },2000);
           } else {
-            app.loading = false;
+            $('.loading-manju').loading({ destroy: true });
             app.disabled = false;
             $scope.alert = 'alert alert-danger';
             app.errorMsg = data.data.message;
           }
         });
       } else {
-        app.loading = false;
+        $('.loading-manju').loading({ destroy: true });
         app.disabled = false;
         $scope.alert = 'alert alert-danger';
         app.errorMsg = 'Please ensure form is filled out Properly'

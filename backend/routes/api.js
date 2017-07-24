@@ -6,8 +6,10 @@ var nodemailer  =   require('nodemailer');
 var sgTransport =   require('nodemailer-sendgrid-transport');
 var config      =   require('../../config');
 var jwt         =   require('jsonwebtoken');
+var Semester    =   require('../models/semester');
+const async     =   require('async');
 
-
+var Sem = Semester.Sem;
 
 var options = {
         service: 'Gmail',
@@ -167,7 +169,7 @@ apiRoute.route('/activate/:token')
                 if(err) {
                     res.json({success: false, message: 'Activation Link has expired requset for a new one'});
                 } else if(!user) {
-                    res.json({success: false, message: 'Activation Link has expired requset for a new one'});
+                    res.json({success: false, message: 'Activation Link has expired request for a new one'});
                 } else {
                     user.temporarytoken = false;
                     user.active = true;
@@ -496,7 +498,7 @@ apiRoute.route('/permission')
 apiRoute.route('/management')
 .all(verifyuser,verifyadmin)
 .get(function (req, res, next) {
-  User.find({}, function (err,users) {
+  User.find({ }, function (err,users) {
     if (err) {
       res.json({ success: false, message: err});
     } else {
@@ -522,6 +524,42 @@ apiRoute.route('/changePermission')
       });
     } else {
       res.json({ success: false, message: 'User not found!'});
+    }
+  });
+});
+
+apiRoute.route('/createusers')
+.all(verifyuser,verifyadmin)
+.post(function (req, res) {
+  async.each(req.body,function (detail,callback) {
+    if (detail.username) {
+      var user = new User();
+      user.username = detail.username;
+      user.name = 'Dummy User';
+      user.email = detail.email;
+      user.registered = false;
+      user.active = false;
+      user.password = 'Manju@123';
+      for (var j = 0; j < 8; j++) {
+        var sem = new Sem();
+        sem.SemNumber = j+1;
+        user.semesters.push(sem);
+      }
+      user.save(function (err,user) {
+        if (err) {
+            callback(err);
+        } else {
+          callback();
+        }
+      });
+    } else {
+      callback();
+    }
+  },function (err) {
+    if (err) {
+      res.json({ success: false, message: err });
+    } else {
+      res.json({ success: true, message: 'Users created Successfully!' });
     }
   });
 });

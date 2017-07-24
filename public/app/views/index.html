@@ -12,6 +12,7 @@
     <script src="assets/js/angular.js"></script>
     <script src="assets/js/angular-route.js"></script>
     <script src="assets/js/angular-animate.js"></script>
+    <script src="assets/js/angular-file-to-json.js"></script>
 
     <!-- Angular Config/Routes Files -->
     <script src="app/app.js"></script>
@@ -28,11 +29,14 @@
     <!-- Angular Services -->
     <script src="app/services/userservices.js"></script>
     <script src="app/services/authServices.js"></script>
+    <script src="app/services/studentservices.js"></script>
+    <script src="app/services/teacherservices.js"></script>
 
     <!-- Cascaded Style Sheets -->
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <link rel="stylesheet" type="text/css" href="assets/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/jquery-loading.css">
 
     <!-- Favicon -->
     <link rel="icon" href="../../assets/images/favicon.ico">
@@ -83,6 +87,9 @@
             </li>
             <li>
                 <a ng-show="main.isLoggedIn&&main.authorized === 'admin'" class="page-scroll" href="/management">Management</a>
+            </li>
+            <li>
+                <a ng-show="main.isLoggedIn&&main.authorized === 'teacher'" class="page-scroll" href="/teacher/createsubject">Create Subject</a>
             </li>
           </ul>
         </div>
@@ -139,5 +146,6 @@
      <!-- /container -->
     <script src="assets/js/jquery-3.2.1.js"></script>
     <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/jquery-loading.js"></script>
   </body>
 </html>

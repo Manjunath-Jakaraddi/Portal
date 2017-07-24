@@ -120,19 +120,21 @@ angular.module('emailController',['userServices'])
     app.errorMsg = false;
     app.successMsg = false;
     app.disabled = true;
-    app.loading = true;
+    $('.loading-manju').loading({ base: 0.2 });
 
     if (valid && confirmed) {
       app.regData.username = $scope.username;
       User.savePassword(app.regData).then(function (data) {
-        app.loading = false;
+        $('.loading-manju').loading({ destroy: true });
         if (data.data.success) {
           $scope.alert = 'alert alert-success';
           app.successMsg = data.data.message + '...Redirecting';
           $timeout(function () {
+            $('.loading-manju').loading({ destroy: true });
             $location.path('/login');
           },2000);
         } else {
+          $('.loading-manju').loading({ destroy: true });
           $scope.alert = 'alert alert-danger';
           app.disabled = false;
           app.errorMsg = data.data.message;
@@ -140,7 +142,7 @@ angular.module('emailController',['userServices'])
       });
     } else {
       $scope.alert = 'alert alert-danger';
-      app.loading = false;
+      $('.loading-manju').loading({ destroy: true });
       app.disabled = false;
       app.errorMsg = 'Please ensure form is filled out properly';
     }

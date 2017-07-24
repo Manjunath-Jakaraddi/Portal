@@ -1,0 +1,79 @@
+<div class="loading-manju">
+  <div class="row text-center">
+      <div class="container">
+          <h2 class="section-heading">Create Subject</h2>
+          <h3 class="section-subheading text-muted">Please enter the subject information.</h3>
+      </div>
+  </div>
+
+
+
+  <section id="contact">
+      <div class="container">
+
+
+          <div class="row">
+            <div class="col-lg-12">
+              <form name="createsubject" id="contactForm" ng-submit="teacher.createsubject(subjectData,createsubject.$valid);" novalidate>
+                <div class="row">
+                  <div class="col-lg-10 col-lg-offset-1">
+
+                    <div class="form-group">
+                      <label>Subject Name:</label>
+                      <input ng-disabled="teacher.disabled" class="form-control" type="text" name="subname" placeholder="Subject Name *" ng-model="teacher.subjectData.subjectname" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Subject Code:</label>
+                      <input ng-disabled="teacher.disabled" class="form-control" type="text" name="subcode" placeholder="Subject Code *" ng-model="teacher.subjectData.subjectcode" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Semester:</label>
+                        <select ng-disabled="teacher.disabled" class="form-group input-lg" ng-options="sem for sem in [1,2,3,4,5,6,7,8]" ng-model="teacher.subjectData.sem"></select>
+                    </div>
+
+                    <h3 style="text-align: center">Max Marks</h3>
+
+                    <div class="form-group">
+                      <div ng-class="{'has-success': (createsubject.theorymax.$valid&&!createsubject.theorymax.$pristine),'has-error':((!createsubject.theorymax.$valid&&!createsubject.theorymax.$pristine)||(!createsubject.theorymax.$valid&&createsubject.$submitted))}">
+                        <label>Theory:</label>
+                        <input ng-disabled="teacher.disabled" class="form-control" type="text" ng-pattern="/^([0-4][0-9]|50)$/" name="theorymax" placeholder="Max Theory *" ng-model="teacher.subjectData.theorymax" autocomplete="off">
+                      </div>
+                    <div>
+
+                    <br>
+
+                    <div class="form-group">
+                      <div ng-class="{'has-success': (createsubject.quizmax.$valid&&!createsubject.quizmax.$pristine),'has-error':((!createsubject.quizmax.$valid&&!createsubject.quizmax.$pristine)||(!createsubject.quizmax.$valid&&createsubject.$submitted))}">
+                        <label>Quiz:</label>
+                        <input ng-disabled="teacher.disabled" class="form-control" type="text" ng-pattern="/^([0-9]|1[0-5])$/" name="quizmax" placeholder="Max Quiz *" ng-model="teacher.subjectData.quizmax" autocomplete="off">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div ng-class="{'has-success': (createsubject.totalmax.$valid&&!createsubject.totalmax.$pristine),'has-error':((!createsubject.totalmax.$valid&&!createsubject.totalmax.$pristine)||(!createsubject.totalmax.$valid&&createsubject.$submitted))}">
+                      <label>Total:</label>
+                      <input ng-disabled="teacher.disabled" class="form-control" type="text" name="totalmax" ng-pattern="/^([0-9]|[1-3][0-9]|4[0-5])$/" placeholder="Max Total *" ng-model="teacher.subjectData.totalmax" autocomplete="off">
+                    </div>
+
+                    <div class="clearfix"></div>
+                    <br>
+                    <div class="">
+                      <button class="col-lg-4 col-lg-offset-4 btn btn-xl" type="submit" ng-disabled="teacher.disabled">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+      <br>
+      <br>
+      <div class="row show-hide-message" ng-show="teacher.successMsg || teacher.errorMsg">
+          <div class="col-lg-6 col-lg-offset-3">
+              <div ng-class="teacher.alert">{{ teacher.successMsg || teacher.errorMsg }}</div>
+          </div>
+      </div>
+  </section>
+</div>

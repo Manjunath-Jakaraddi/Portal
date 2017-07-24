@@ -9,6 +9,7 @@ var port        = process.env.PORT || 8080;
 
 // Routes
 var apiRoute = require('./backend/routes/api');
+var studentapiRoute = require('./backend/routes/studentapi');
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -17,6 +18,7 @@ app.use(express.static(__dirname + '/public'));
 
 // Routes Linking
 app.use('/api',apiRoute);
+app.use('/student/api',studentapiRoute);
 
 // CONNECTING TO MONGODB
 mongoose.Promise = global.Promise;

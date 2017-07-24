@@ -1,6 +1,6 @@
 angular.module('managementController', [])
 
-.controller('managementCtrl', function(User, $scope) {
+.controller('managementCtrl', ['User','$scope','$timeout',function(User, $scope, $timeout) {
     var app = this;
 
     app.loading = true;
@@ -8,11 +8,12 @@ angular.module('managementController', [])
     app.errorMsg = false;
     app.editAccess = false;
     app.deleteAccess = false;
-    app.limit = 5;
+    app.limit = 10;
     app.searchLimit = 0;
     app.options = [{value: 'admin',label: 'admin'},{value: 'student',label: 'student'},{value: 'teacher', label: 'teacher'}];
 
     function getUsers() {
+      app.loading = true;
         User.getUsers().then(function(data) {
             if (data.data.success) {
                 if (data.data.permission === 'admin') {
@@ -86,4 +87,27 @@ angular.module('managementController', [])
         }
       });
     }
-});
+
+    app.upload = function () {
+      $('.loading-manju').loading({ base: 0.2 });
+      app.successMsg = undefined;
+      app.errorMsg = undefined;
+      app.alert = 'default';
+      User.createusers(app.obj).then(function (data) {
+        if (data.data.success) {
+          app.alert = 'alert alert-success';
+          app.successMsg = data.data.message;
+        } else {
+          app.alert = 'alert alert-danger';
+          app.errorMsg = data.data.message;
+        }
+        $timeout(function () {
+          getUsers();
+          $('.loading-manju').loading({ destroy: true });
+          app.successMsg = undefined;
+          app.errorMsg = undefined;
+          app.obj = undefined;
+        },3000);
+      });
+    };
+}]);

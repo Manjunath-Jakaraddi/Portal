@@ -1,1 +1,54 @@
-<h1>This is for teacher only</h1>
+<div class="loading-manju">
+  <div class="row text-center">
+      <div class="container">
+          <h2 class="section-heading">Teachers Page</h2>
+          <h3 class="section-subheading text-muted">This page is for teachers only.</h3>
+      </div>
+  </div>
+  <section id="contact">
+      <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <form class="updatemarks" id="contactForm" ng-submit="teacher.updatemarks(details, teacher.obj);" novalidate>
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label>Select Subject:</label>
+                      <select ng-disabled="teacher.disabled" class="form-group input-lg" ng-model="teacher.details.selectedsubject">
+                        <option value="{{sub}}" ng-repeat="sub in teacher.subjects">{{sub.Subname}}&nbsp [ {{sub.Subcode}}&nbsp Sem: {{sub.semester}} ]</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-2">
+                    <div class="form-group">
+                      <label>CIE:</label>
+                      <br>
+                      <select ng-disabled="teacher.disabled" class="form-group input-lg" ng-options="cie for cie in [1,2,3]" ng-model="teacher.details.selectedCie"></select>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div style="display:inline-block">
+                      <label>File Upload(Csv only):</label>
+                      <ng-file-to-json class="" result="teacher.obj"></ng-file-to-json>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <button class="col-lg-4 col-lg-offset-4 btn btn-xl" type="submit" ng-disabled="teacher.disabled||teacher.obj===undefined">Upload</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+      <br>
+      <br>
+      <div class="row show-hide-message" ng-show="teacher.successMsg || teacher.errorMsg">
+          <div class="col-lg-6 col-lg-offset-3">
+              <div ng-class="teacher.alert">{{ teacher.successMsg || teacher.errorMsg }}</div>
+          </div>
+      </div>
+  </section>
+
+</div>

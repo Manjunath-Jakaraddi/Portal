@@ -72,5 +72,9 @@ angular.module('userServices',[])
       return $http.put('/api/changePermission',details);
     }
 
+    userFactory.createusers = function (user) {
+      return $http.post('/api/createusers',user);
+    }
+
     return userFactory;
 }]);

@@ -9,7 +9,9 @@ angular.module('MyApp',[
     'ngAnimate',
     'studentController',
     'teacherController',
-    'managementController'
+    'managementController',
+    'studentServices',
+    'teacherServices'
 ])
 
 .config(['$httpProvider', function ($httpProvider) {

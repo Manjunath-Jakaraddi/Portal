@@ -541,9 +541,13 @@ apiRoute.route('/createusers')
       user.active = false;
       user.password = 'Manju@123';
       for (var j = 0; j < 8; j++) {
-        var sem = new Sem();
-        sem.SemNumber = j+1;
-        user.semesters.push(sem);
+        (function (k) {
+          var sem = {};
+          sem.studentid = user._id;
+          sem.Sgpa = null;
+          sem.SemNumber = k+1;
+          user.semesters.push(sem);
+        })(j);
       }
       user.save(function (err,user) {
         if (err) {
@@ -557,6 +561,7 @@ apiRoute.route('/createusers')
     }
   },function (err) {
     if (err) {
+      console.log(err);
       res.json({ success: false, message: err });
     } else {
       res.json({ success: true, message: 'Users created Successfully!' });

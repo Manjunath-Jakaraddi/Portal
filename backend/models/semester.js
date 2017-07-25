@@ -10,7 +10,7 @@ var Subject = SubjectModule.Subject;
 
 var SemSchema = new Schema({
   Subjects  :   [{ type: Schema.Types.ObjectId, ref: 'Subject' }],
-  SemNumber :   { type: Number, min:1, max:8},
+  SemNumber :   { type: Number, min:1, max:8, unique: false},
   Sgpa      :   { type: Float }
 }, { timestamps: true}
 );

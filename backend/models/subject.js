@@ -37,7 +37,6 @@ var SubjectSchema = new Schema({
 );
 
 module.exports  =   {
-  Cie : mongoose.model('Cie', CieSchema),
   SubjectSchema: SubjectSchema,
   Subject: mongoose.model('Subject', SubjectSchema)
 };

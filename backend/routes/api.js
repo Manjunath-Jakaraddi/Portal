@@ -6,10 +6,8 @@ var nodemailer  =   require('nodemailer');
 var sgTransport =   require('nodemailer-sendgrid-transport');
 var config      =   require('../../config');
 var jwt         =   require('jsonwebtoken');
-var Semester    =   require('../models/semester');
 const async     =   require('async');
 
-var Sem = Semester.Sem;
 
 var options = {
         service: 'Gmail',
@@ -407,49 +405,61 @@ var verifyuser = function (req, res, next) {
 };
 
 var verifystudent = function (req, res, next) {
-  User.findOne({ username: req.decoded.username}, function (err, user) {
-    if (err) {
-      res.json({ success: false, message: err});
-    } else if (user){
-      if ( user.permission !== 'student') {
-        res.json({ success: false, message: 'Insuffcient Permissions!'});
+  if (req.decoded.username) {
+    User.findOne({ username: req.decoded.username}, function (err, user) {
+      if (err) {
+        res.json({ success: false, message: err});
+      } else if (user){
+        if ( user.permission !== 'student') {
+          res.json({ success: false, message: 'Insuffcient Permissions!'});
+        } else {
+          next();
+        }
       } else {
-        next();
+        res.json({ success: false, message: 'User not found!'});
       }
-    } else {
-      res.json({ success: false, message: 'User not found!'});
-    }
-  });
+    });
+  } else {
+    res.json({ success: false, message: 'User not found!'});
+  }
 };
 var verifyteacher = function (req, res, next) {
-  User.findOne({ username: req.decoded.username}, function (err, user) {
-    if (err) {
-      res.json({ success: false, message: err});
-    } else if (user) {
-      if ( user.permission !== 'teacher') {
-        res.json({ success: false, message: 'Insuffcient Permissions!'});
+  if (req.decoded.username) {
+    User.findOne({ username: req.decoded.username}, function (err, user) {
+      if (err) {
+        res.json({ success: false, message: err});
+      } else if (user) {
+        if ( user.permission !== 'teacher') {
+          res.json({ success: false, message: 'Insuffcient Permissions!'});
+        } else {
+          next();
+        }
       } else {
-        next();
+        res.json({ success: false, message: 'User not found!'});
       }
-    } else {
-      res.json({ success: false, message: 'User not found!'});
-    }
-  });
+    });
+  } else {
+    res.json({ success: false, message: 'User not found!'});
+  }
 };
 var verifyadmin = function (req, res, next) {
-  User.findOne({ username: req.decoded.username}, function (err, user) {
-    if (err) {
-      res.json({ success: false, message: err});
-    } else if (user) {
-      if ( user.permission !== 'admin') {
-        res.json({ success: false, message: 'Insuffcient Permissions!'});
+  if (req.decoded.username) {
+    User.findOne({ username: req.decoded.username}, function (err, user) {
+      if (err) {
+        res.json({ success: false, message: err});
+      } else if (user) {
+        if ( user.permission !== 'admin') {
+          res.json({ success: false, message: 'Insuffcient Permissions!'});
+        } else {
+          next();
+        }
       } else {
-        next();
+        res.json({ success: false, message: 'User not found!'});
       }
-    } else {
-      res.json({ success: false, message: 'User not found!'})
-    }
-  });
+    });
+  } else {
+    res.json({ success: false, message: 'User not found!'});
+  }
 };
 
 apiRoute.route('/me')

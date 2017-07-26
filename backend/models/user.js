@@ -3,11 +3,21 @@ var Schema            =     mongoose.Schema;
 var bcrypt            =     require('bcrypt-nodejs');
 var titlize           =     require('mongoose-title-case');
 var validate          =     require('mongoose-validator');
-var Semester          =     require('./semester.js');
 var teacher           =     require('./teacher.js');
+var SubjectModule    =   require('./subject.js');
+var Float            =   require('mongoose-float').loadType(mongoose);
 
-var SemSchema = Semester.SemSchema;
+
+var Subject = SubjectModule.Subject;
 var SubjectDetailsSchema  = teacher.SubjectDetailsSchema;
+
+
+var SemSchema = new Schema({
+  Subjects  :   [{ type: Schema.Types.ObjectId, ref: 'Subject' }],
+  SemNumber :   { type: Number, min:1, max:8, unique: false, required: true },
+  Sgpa      :   { type: Float }
+});
+
 
 var nameValidator = [
     validate({

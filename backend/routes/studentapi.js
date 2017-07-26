@@ -4,18 +4,12 @@ var mongoose          =   require('mongoose');
 var config            =   require('../../config');
 var jwt               =   require('jsonwebtoken');
 var SubjectModule     =   require('../models/subject.js');
-var Semester          =   require('../models/semester');
 var User              =   require('../models/user.js');
 var teacher           =   require('../models/teacher.js');
 const async           =   require('async');
 
 var Subject = SubjectModule.Subject;
-var SubjectSchema = SubjectModule.SubjectSchema;
 
-var Cie = SubjectModule.Cie;
-
-var Sem = Semester.Sem;
-var SemSchema = Semester.SemSchema;
 var SubjectDetails = teacher.SubjectDetails;
 
 apiRoute = express.Router();

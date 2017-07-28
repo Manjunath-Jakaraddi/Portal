@@ -7,24 +7,32 @@
 </div>
 <!-- Heading -->
 
-<div class="panel panel-info">
-
-    <!-- Default panel contents -->
-    <div class="panel-heading" style="text-align: center;"><strong>User Profile</strong></div>
-
-    <!-- Table -->
-    <table class="table">
-        <tr>
-            <td><strong>Name</strong></td>
-            <td><strong>USN</strong></td>
-            <td><strong>Email Address</strong></td>
-            <td><strong>Password</strong></td>
-        </tr>
-        <tr>
-            <td>{{ main.name }}</td>
-            <td>{{ main.username }}</td>
-            <td>{{ main.email }}</td>
-            <td>****************</td>
-        </tr>
-    </table>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h1 class="panel-title" style="text-align:center;font-size:30px">{{ main.name}}</h1>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-3 col-lg-3" align="center"> <img alt="User Pic" src="assets/images/userimage.png" class="img-circle img-responsive"></div>
+      <div class=" col-md-8 col-lg-8 col-md-offset-1 col-lg-offset-1">
+        <table class="table table-user-information">
+          <tbody>
+            <tr>
+              <td>USN</td>
+              <td>{{main.username}}</td>
+            </tr>
+            <tr>
+              <td>Department:</td>
+              <td>Computer Science and Engineering</td>
+            </tr>
+            <!-- DOB GENDER ADDRRESS PHONE NUMBER -->
+            <tr>
+              <td>Email</td>
+              <td>{{main.email}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

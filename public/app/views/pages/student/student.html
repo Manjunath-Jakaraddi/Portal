@@ -1,1 +1,141 @@
-<h1>This is for student only</h1>
+<div class="loading-manju col-md-12">
+  <div class="row text-center">
+      <div class="container">
+          <h2 class="section-heading">Students Page</h2>
+          <h3 class="section-subheading text-muted">This page is for students only.</h3>
+      </div>
+  </div>
+    <div class="container">
+      <div class="row heading" >
+        <h1 style="display:inline-block">Semester : </h1>
+        <select class="input-lg" ng-options="sem for sem in [1,2,3,4,5,6,7,8]" ng-model="student.dispsem"></select>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <ul class="nav nav-tabs">
+            <li role="presentation" ng-class="{active: student.isSelected(1)}">
+              <a ng-click="student.select(1)" aria-controls="Cie1" role="tab">CIE1</a>
+            </li>
+            <li role="presentation" ng-class="{active: student.isSelected(2)}">
+              <a ng-click="student.select(2)" aria-controls="Cie2" role="tab">CIE2</a>
+            </li>
+            <li role="presentation" ng-class="{active: student.isSelected(3)}">
+              <a ng-click="student.select(3)" aria-controls="Cie3" role="tab">CIE3</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <ul class="media-list tab-pane fade in active">
+
+
+              <li class="panel panel-primary">
+                <div class="panel-heading">
+                  <h2 class="panel-title" style="text-align:center">CIE 1</h2>
+                </div>
+                <div class="panel-body" ng-show="student.slctd === 1">
+                  <table class="table table-bordered" style="background: #a4dcdc">
+                    <tr class="info">
+                        <th>Subject</th>
+                        <th>Subject Code</th>
+                        <th>Theory</th>
+                        <th>Quiz</th>
+                        <th>Total</th>
+                    </tr>
+                    <tr ng-repeat="subject in student.sems[student.dispsem -1].Subjects">
+                      <td>{{subject.Subname}}</td>
+                      <td>{{subject.Subcode}}</td>
+
+                      <td ng-show="subject.CieMarks[0].cienumber === 1">{{subject.CieMarks[0].theory}}/{{subject.CieMax.theory}}</td>
+                      <td ng-show="subject.CieMarks[0].cienumber === 1">{{subject.CieMarks[0].quiz}}/{{subject.CieMax.quiz}}</td>
+                      <td ng-show="subject.CieMarks[0].cienumber === 1">{{subject.CieMarks[0].total}}/{{subject.CieMax.total}}</td>
+
+                      <td ng-show="subject.CieMarks[1].cienumber === 1">{{subject.CieMarks[1].theory}}/{{subject.CieMax.theory}}</td>
+                      <td ng-show="subject.CieMarks[1].cienumber === 1">{{subject.CieMarks[1].quiz}}/{{subject.CieMax.quiz}}</td>
+                      <td ng-show="subject.CieMarks[1].cienumber === 1">{{subject.CieMarks[1].total}}/{{subject.CieMax.total}}</td>
+
+                      <td ng-show="subject.CieMarks[2].cienumber === 1">{{subject.CieMarks[2].theory}}/{{subject.CieMax.theory}}</td>
+                      <td ng-show="subject.CieMarks[2].cienumber === 1">{{subject.CieMarks[2].quiz}}/{{subject.CieMax.quiz}}</td>
+                      <td ng-show="subject.CieMarks[2].cienumber === 1">{{subject.CieMarks[2].total}}/{{subject.CieMax.total}}</td>
+                    </tr>
+                  </table>
+                </div>
+              </li>
+              <li class="panel panel-primary">
+                <div class="panel-heading">
+                  <h2 class="panel-title" style="text-align:center">CIE 2</h2>
+                </div>
+                <div class="panel-body" ng-show="student.slctd === 2">
+                  <table class="table table-bordered" style="background: #a4dcdc">
+                    <tr class="info">
+                        <th>Subject</th>
+                        <th>Subject Code</th>
+                        <th>Theory</th>
+                        <th>Quiz</th>
+                        <th>Total</th>
+                    </tr>
+                    <tr ng-repeat="subject in student.sems[student.dispsem -1].Subjects">
+                      <td>{{subject.Subname}}</td>
+                      <td>{{subject.Subcode}}</td>
+
+                      <td ng-show="subject.CieMarks[0].cienumber === 2">{{subject.CieMarks[0].theory}}/{{subject.CieMax.theory}}</td>
+                      <td ng-show="subject.CieMarks[0].cienumber === 2">{{subject.CieMarks[0].quiz}}/{{subject.CieMax.quiz}}</td>
+                      <td ng-show="subject.CieMarks[0].cienumber === 2">{{subject.CieMarks[0].total}}/{{subject.CieMax.total}}</td>
+
+                      <td ng-show="subject.CieMarks[1].cienumber === 2">{{subject.CieMarks[1].theory}}/{{subject.CieMax.theory}}</td>
+                      <td ng-show="subject.CieMarks[1].cienumber === 2">{{subject.CieMarks[1].quiz}}/{{subject.CieMax.quiz}}</td>
+                      <td ng-show="subject.CieMarks[1].cienumber === 2">{{subject.CieMarks[1].total}}/{{subject.CieMax.total}}</td>
+
+                      <td ng-show="subject.CieMarks[2].cienumber === 2">{{subject.CieMarks[2].theory}}/{{subject.CieMax.theory}}</td>
+                      <td ng-show="subject.CieMarks[2].cienumber === 2">{{subject.CieMarks[2].quiz}}/{{subject.CieMax.quiz}}</td>
+                      <td ng-show="subject.CieMarks[2].cienumber === 2">{{subject.CieMarks[2].total}}/{{subject.CieMax.total}}</td>
+                      <td ng-show="!(subject.CieMarks[0].cienumber === 2||subject.CieMarks[1].cienumber === 2||subject.CieMarks[2].cienumber === 2)">--</td><td ng-show="!(subject.CieMarks[0].cienumber === 2||subject.CieMarks[1].cienumber === 2||subject.CieMarks[2].cienumber === 2)">--</td><td ng-show="!(subject.CieMarks[0].cienumber === 2||subject.CieMarks[1].cienumber === 2||subject.CieMarks[2].cienumber === 2)">--</td>
+                    </tr>
+                  </table>
+                </div>
+              </li>
+              <li class="panel panel-primary">
+                <div class="panel-heading">
+                  <h2 class="panel-title" style="text-align:center">CIE 3</h2>
+                </div>
+                <div class="panel-body" ng-show="student.slctd === 3">
+                  <table class="table table-bordered" style="background: #a4dcdc">
+                    <tr class="info">
+                        <th>Subject</th>
+                        <th>Subject Code</th>
+                        <th>Theory</th>
+                        <th>Quiz</th>
+                        <th>Total</th>
+                    </tr>
+                    <tr ng-repeat="subject in student.sems[student.dispsem -1].Subjects">
+                      <td>{{subject.Subname}}</td>
+                      <td>{{subject.Subcode}}</td>
+
+                      <td ng-show="subject.CieMarks[0].cienumber === 3">{{subject.CieMarks[0].theory}}/{{subject.CieMax.theory}}</td>
+                      <td ng-show="subject.CieMarks[0].cienumber === 3">{{subject.CieMarks[0].quiz}}/{{subject.CieMax.quiz}}</td>
+                      <td ng-show="subject.CieMarks[0].cienumber === 3">{{subject.CieMarks[0].total}}/{{subject.CieMax.total}}</td>
+
+                      <td ng-show="subject.CieMarks[1].cienumber === 3">{{subject.CieMarks[1].theory}}/{{subject.CieMax.theory}}</td>
+                      <td ng-show="subject.CieMarks[1].cienumber === 3">{{subject.CieMarks[1].quiz}}/{{subject.CieMax.quiz}}</td>
+                      <td ng-show="subject.CieMarks[1].cienumber === 3">{{subject.CieMarks[1].total}}/{{subject.CieMax.total}}</td>
+
+                      <td ng-show="subject.CieMarks[2].cienumber === 3">{{subject.CieMarks[2].theory}}/{{subject.CieMax.theory}}</td>
+                      <td ng-show="subject.CieMarks[2].cienumber === 3">{{subject.CieMarks[2].quiz}}/{{subject.CieMax.quiz}}</td>
+                      <td ng-show="subject.CieMarks[2].cienumber === 3">{{subject.CieMarks[2].total}}/{{subject.CieMax.total}}</td>
+
+                      <td ng-show="!(subject.CieMarks[0].cienumber === 3||subject.CieMarks[1].cienumber === 3||subject.CieMarks[2].cienumber === 3)">--</td><td ng-show="!(subject.CieMarks[0].cienumber === 3||subject.CieMarks[1].cienumber === 3||subject.CieMarks[2].cienumber === 3)">--</td><td ng-show="!(subject.CieMarks[0].cienumber === 3||subject.CieMarks[1].cienumber === 3||subject.CieMarks[2].cienumber === 3)">--</td>
+                    </tr>
+                  </table>
+                </div>
+              </li>
+
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="row show-hide-message" ng-show="student.successMsg || student.errorMsg">
+          <div class="col-lg-6 col-lg-offset-3">
+              <div ng-class="student.alert">{{ student.successMsg || student.errorMsg }}</div>
+          </div>
+      </div>
+</div>

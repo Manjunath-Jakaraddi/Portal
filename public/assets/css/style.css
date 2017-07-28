@@ -1081,3 +1081,7 @@ END: LOADING ICON FOR LOGGING OUT USER
 .showmore {
     display: inline;
 }
+
+.heading {
+  margin: 5%;
+}

@@ -186,10 +186,23 @@ apiRoute.route('/updatemarks')
                       });
                     }
                   });
-                  // End of saving
                 } else {
-                  console.log("sub found!");
-                  callback();
+                  console.log("FOUND!!");
+                  var cie = {};
+                  cie.theory = parseFloat(detail.theory);
+                  cie.quiz = parseFloat(detail.quiz);
+                  cie.total = parseFloat(detail.total);
+                  cie.absent = false;
+                  cie.cienumber = req.body.Cie;
+                  sub[0].CieMarks.push(cie);
+                  // Saving Student and subject
+                  sub[0].save(function (err) {
+                    if (err) {
+                      callback(err);
+                    } else {
+                      callback();
+                    }
+                  });
                 }
               });
             }
@@ -218,16 +231,14 @@ apiRoute.route('/updatemarks')
 
 
 
-apiRoute.route('/show/:id')
+apiRoute.route('/getmarks')
+.all(verifyuser,verifystudent)
 .get(function (req,res) {
-  User.findOne({ _id : req.params.id }).select('semesters').populate('semesters.Subjects').exec(function (err,data) {
+  User.findOne({ username:req.decoded.username }).select('semesters').populate('semesters.Subjects').exec(function (err,data) {
     if (err) {
-      res.json({message: err});
+      res.json({success: false, message: err });
     } else {
-      res.json(data);
-      // Subject.findOne({ _id: data.semesters[3].Subjects[0]}).exec(function (err, sub) {
-      //   res.json(sub);
-      // });
+      res.json({success: true, message: data.semesters});
     }
   })
 });

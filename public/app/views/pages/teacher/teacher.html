@@ -11,7 +11,7 @@
             <div class="col-lg-12">
               <form class="updatemarks" id="contactForm" ng-submit="teacher.updatemarks(details, teacher.obj);" novalidate>
                 <div class="row">
-                  <div class="col-lg-6">
+                  <div class="col-lg-7">
                     <div class="form-group">
                       <label>Select Subject:</label>
                       <select ng-disabled="teacher.disabled" class="form-group input-lg" ng-model="teacher.details.selectedsubject">
@@ -26,7 +26,7 @@
                       <select ng-disabled="teacher.disabled" class="form-group input-lg" ng-options="cie for cie in [1,2,3]" ng-model="teacher.details.selectedCie"></select>
                     </div>
                   </div>
-                  <div class="col-lg-4">
+                  <div class="col-lg-3">
                     <div style="display:inline-block">
                       <label>File Upload(Csv only):</label>
                       <ng-file-to-json class="" result="teacher.obj"></ng-file-to-json>

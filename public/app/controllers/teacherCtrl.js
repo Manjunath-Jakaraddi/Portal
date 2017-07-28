@@ -78,7 +78,6 @@ angular.module('teacherController',['ngFileToJson','teacherServices'])
         app.alert = 'default';
         app.details.selectedsubject = null;
         app.details.selectedCie = null;
-        app.obj = null;
       },1500);
     });
   };

@@ -2,7 +2,7 @@ module.exports = {
   'mongoUrl'            :   'mongodb://manju:manju@ds151062.mlab.com:51062/manjurvce',
   'secretKey'           :   '12345-67890-09876-54321',
   'mailingcredentials'  :   { 'email': 'manjunath180397@gmail.com', 'password': 'Manju@180397'},
-  'URL'                 :   'mongodb://manju:manju@ds151062.mlab.com:51062/manjurvce'
+  'URL'                 :   'http://evening-escarpment-52396.herokuapp.com'
   // http://evening-escarpment-52396.herokuapp.com
   // 'mongodb://localhost:27017/manju'
   // 'mongodb://manju:manju@ds151062.mlab.com:51062/manjurvce'

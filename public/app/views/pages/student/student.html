@@ -1,10 +1,10 @@
 <div class="loading-manju col-md-12">
-  <div class="row text-center">
+  <!--<div class="row text-center">
       <div class="container">
           <h2 class="section-heading">Students Page</h2>
           <h3 class="section-subheading text-muted">This page is for students only.</h3>
       </div>
-  </div>
+  </div>-->
     <div class="container">
       <div class="row heading" >
         <h1 style="display:inline-block">Semester : </h1>
@@ -25,8 +25,6 @@
           </ul>
           <div class="tab-content">
             <ul class="media-list tab-pane fade in active">
-
-
               <li class="panel panel-primary">
                 <div class="panel-heading">
                   <h2 class="panel-title" style="text-align:center">CIE 1</h2>
@@ -40,22 +38,13 @@
                         <th>Quiz</th>
                         <th>Total</th>
                     </tr>
-                    <tr ng-repeat="subject in student.sems[student.dispsem -1].Subjects">
-                      <td>{{subject.Subname}}</td>
-                      <td>{{subject.Subcode}}</td>
-
-                      <td ng-show="subject.CieMarks[0].cienumber === 1">{{subject.CieMarks[0].theory}}/{{subject.CieMax.theory}}</td>
-                      <td ng-show="subject.CieMarks[0].cienumber === 1">{{subject.CieMarks[0].quiz}}/{{subject.CieMax.quiz}}</td>
-                      <td ng-show="subject.CieMarks[0].cienumber === 1">{{subject.CieMarks[0].total}}/{{subject.CieMax.total}}</td>
-
-                      <td ng-show="subject.CieMarks[1].cienumber === 1">{{subject.CieMarks[1].theory}}/{{subject.CieMax.theory}}</td>
-                      <td ng-show="subject.CieMarks[1].cienumber === 1">{{subject.CieMarks[1].quiz}}/{{subject.CieMax.quiz}}</td>
-                      <td ng-show="subject.CieMarks[1].cienumber === 1">{{subject.CieMarks[1].total}}/{{subject.CieMax.total}}</td>
-
-                      <td ng-show="subject.CieMarks[2].cienumber === 1">{{subject.CieMarks[2].theory}}/{{subject.CieMax.theory}}</td>
-                      <td ng-show="subject.CieMarks[2].cienumber === 1">{{subject.CieMarks[2].quiz}}/{{subject.CieMax.quiz}}</td>
-                      <td ng-show="subject.CieMarks[2].cienumber === 1">{{subject.CieMarks[2].total}}/{{subject.CieMax.total}}</td>
-                    </tr>
+                    <tr ng-repeat="subject in student.data_display[student.dispsem]">
+                      <td ng-show="subject[1][0].Subname">{{subject[1][0].Subname}}</td>
+                      <td ng-show="subject[1][0].Subcode">{{subject[1][0].Subcode}}</td>
+                      <td ng-show="subject[0][0].theory">{{subject[0][0].theory}}/{{subject[1][0].Maxtheory}}</td>
+                      <td ng-show="subject[0][0].quiz">{{subject[0][0].theory}}/{{subject[1][0].Maxquiz}}</td>
+                      <td ng-show="subject[0][0].total">{{subject[0][0].total}}/{{subject[1][0].Maxtotal}}</td>
+                      </tr>
                   </table>
                 </div>
               </li>
@@ -72,23 +61,13 @@
                         <th>Quiz</th>
                         <th>Total</th>
                     </tr>
-                    <tr ng-repeat="subject in student.sems[student.dispsem -1].Subjects">
-                      <td>{{subject.Subname}}</td>
-                      <td>{{subject.Subcode}}</td>
-
-                      <td ng-show="subject.CieMarks[0].cienumber === 2">{{subject.CieMarks[0].theory}}/{{subject.CieMax.theory}}</td>
-                      <td ng-show="subject.CieMarks[0].cienumber === 2">{{subject.CieMarks[0].quiz}}/{{subject.CieMax.quiz}}</td>
-                      <td ng-show="subject.CieMarks[0].cienumber === 2">{{subject.CieMarks[0].total}}/{{subject.CieMax.total}}</td>
-
-                      <td ng-show="subject.CieMarks[1].cienumber === 2">{{subject.CieMarks[1].theory}}/{{subject.CieMax.theory}}</td>
-                      <td ng-show="subject.CieMarks[1].cienumber === 2">{{subject.CieMarks[1].quiz}}/{{subject.CieMax.quiz}}</td>
-                      <td ng-show="subject.CieMarks[1].cienumber === 2">{{subject.CieMarks[1].total}}/{{subject.CieMax.total}}</td>
-
-                      <td ng-show="subject.CieMarks[2].cienumber === 2">{{subject.CieMarks[2].theory}}/{{subject.CieMax.theory}}</td>
-                      <td ng-show="subject.CieMarks[2].cienumber === 2">{{subject.CieMarks[2].quiz}}/{{subject.CieMax.quiz}}</td>
-                      <td ng-show="subject.CieMarks[2].cienumber === 2">{{subject.CieMarks[2].total}}/{{subject.CieMax.total}}</td>
-                      <td ng-show="!(subject.CieMarks[0].cienumber === 2||subject.CieMarks[1].cienumber === 2||subject.CieMarks[2].cienumber === 2)">--</td><td ng-show="!(subject.CieMarks[0].cienumber === 2||subject.CieMarks[1].cienumber === 2||subject.CieMarks[2].cienumber === 2)">--</td><td ng-show="!(subject.CieMarks[0].cienumber === 2||subject.CieMarks[1].cienumber === 2||subject.CieMarks[2].cienumber === 2)">--</td>
-                    </tr>
+                    <tr ng-repeat="subject in student.data_display[student.dispsem]">
+                      <td ng-show="subject[1][0].Subname">{{subject[1][0].Subname}}</td>
+                      <td ng-show="subject[1][0].Subcode">{{subject[1][0].Subcode}}</td>
+                      <td ng-show="subject[0][1].theory">{{subject[0][0].theory}}/{{subject[1][0].Maxtheory}}</td>
+                      <td ng-show="subject[0][1].quiz">{{subject[0][0].theory}}/{{subject[1][0].Maxquiz}}</td>
+                      <td ng-show="subject[0][1].total">{{subject[0][0].total}}/{{subject[1][0].Maxtotal}}</td>
+                      </tr>
                   </table>
                 </div>
               </li>
@@ -105,24 +84,13 @@
                         <th>Quiz</th>
                         <th>Total</th>
                     </tr>
-                    <tr ng-repeat="subject in student.sems[student.dispsem -1].Subjects">
-                      <td>{{subject.Subname}}</td>
-                      <td>{{subject.Subcode}}</td>
-
-                      <td ng-show="subject.CieMarks[0].cienumber === 3">{{subject.CieMarks[0].theory}}/{{subject.CieMax.theory}}</td>
-                      <td ng-show="subject.CieMarks[0].cienumber === 3">{{subject.CieMarks[0].quiz}}/{{subject.CieMax.quiz}}</td>
-                      <td ng-show="subject.CieMarks[0].cienumber === 3">{{subject.CieMarks[0].total}}/{{subject.CieMax.total}}</td>
-
-                      <td ng-show="subject.CieMarks[1].cienumber === 3">{{subject.CieMarks[1].theory}}/{{subject.CieMax.theory}}</td>
-                      <td ng-show="subject.CieMarks[1].cienumber === 3">{{subject.CieMarks[1].quiz}}/{{subject.CieMax.quiz}}</td>
-                      <td ng-show="subject.CieMarks[1].cienumber === 3">{{subject.CieMarks[1].total}}/{{subject.CieMax.total}}</td>
-
-                      <td ng-show="subject.CieMarks[2].cienumber === 3">{{subject.CieMarks[2].theory}}/{{subject.CieMax.theory}}</td>
-                      <td ng-show="subject.CieMarks[2].cienumber === 3">{{subject.CieMarks[2].quiz}}/{{subject.CieMax.quiz}}</td>
-                      <td ng-show="subject.CieMarks[2].cienumber === 3">{{subject.CieMarks[2].total}}/{{subject.CieMax.total}}</td>
-
-                      <td ng-show="!(subject.CieMarks[0].cienumber === 3||subject.CieMarks[1].cienumber === 3||subject.CieMarks[2].cienumber === 3)">--</td><td ng-show="!(subject.CieMarks[0].cienumber === 3||subject.CieMarks[1].cienumber === 3||subject.CieMarks[2].cienumber === 3)">--</td><td ng-show="!(subject.CieMarks[0].cienumber === 3||subject.CieMarks[1].cienumber === 3||subject.CieMarks[2].cienumber === 3)">--</td>
-                    </tr>
+                    <tr ng-repeat="subject in student.data_display[student.dispsem]">
+                      <td ng-show="subject[1][0].Subname">{{subject[1][0].Subname}}</td>
+                      <td ng-show="subject[1][0].Subcode">{{subject[1][0].Subcode}}</td>
+                      <td ng-show="subject[0][2].theory">{{subject[0][0].theory}}/{{subject[1][0].Maxtheory}}</td>
+                      <td ng-show="subject[0][2].quiz">{{subject[0][0].theory}}/{{subject[1][0].Maxquiz}}</td>
+                      <td ng-show="subject[0][2].total">{{subject[0][0].total}}/{{subject[1][0].Maxtotal}}</td>
+                      </tr>
                   </table>
                 </div>
               </li>

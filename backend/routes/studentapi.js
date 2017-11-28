@@ -7,6 +7,17 @@ var SubjectModule     =   require('../models/subject.js');
 var User              =   require('../models/user.js');
 var teacher           =   require('../models/teacher.js');
 const async           =   require('async');
+var mysql             =  require('mysql');
+
+// CONNECTING TO MYSQL DATABASE
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : 'please',
+  database : 'manju',
+  multipleStatements: true
+});
+
 
 var Subject = SubjectModule.Subject;
 
@@ -87,25 +98,19 @@ var findSemester = function (obj, num) {
 apiRoute.route('/createsubject')
 .all(verifyuser,verifyteacher)
 .post(function (req, res) {
-  var subdetails = new SubjectDetails();
-  subdetails.Subname = req.body.subjectname;
-  subdetails.Subcode = req.body.subjectcode;
-  subdetails.semester = req.body.sem;
-  subdetails.Max.theory = req.body.theorymax;
-  subdetails.Max.quiz = req.body.quizmax;
-  subdetails.Max.total = req.body.totalmax;
-  User.findOne({ username: req.decoded.username }).select('subjectdetails').exec(function (err, user) {
+  var detail = req.body;
+  connection.query('INSERT INTO sub_details (Subname,Subcode,Maxtheory,Maxquiz,Maxtotal,username,semester) values (?,?,?,?,?,?,?)',
+  [detail.subjectname,detail.subjectcode,parseFloat(detail.theorymax),parseFloat(detail.quizmax),parseFloat(detail.totalmax),req.decoded.username,detail.sem], function(err,result){
     if (err) {
-      res.json({ success: false, message: err });
-    } else if (!user) {
-      res.json({ success: false, message: "User not found!" });
+      res.json({success: false,message: err})
     } else {
-      user.subjectdetails.push(subdetails);
-      user.save(function (err) {
+      connection.query('select max(id) from sub_details',function (err,results) {
         if (err) {
-          res.json({ success: false, message: err });
+          console.log(err);
+          res.json({success: false,message: err});
         } else {
-          res.json({ success: true, message: 'Subject created successfully!' });
+          console.log(results);
+          res.json({success: true, message: "Subject Created Successfully!"});
         }
       });
     }
@@ -115,96 +120,184 @@ apiRoute.route('/createsubject')
 apiRoute.route('/getsubjects')
 .all(verifyuser,verifyteacher)
 .get(function (req, res) {
-  User.findOne({username: req.decoded.username }).select('subjectdetails').exec(function (err, user) {
+  connection.query('Select * from sub_details where username = ?',[req.decoded.username],function (err,results) {
     if (err) {
-      res.json({ success: false, message: err });
-    } else if (!user) {
-      res.json({ success: false, message: "User not found!" });
+      res.json({success: false, message: err })
     } else {
-      res.json({ success: true, message: user.subjectdetails });
+      console.log(results);
+      res.json({ success: true, message: results });
     }
-  })
+  });
 });
 
 apiRoute.route('/updatemarks')
 .all(verifyuser,verifyteacher)
 .post(function (req, res) {
-  User.findOne({ username: req.decoded.username }).select('subjectdetails').exec(function (err, teacheruser) {
+  var subjectdetails = JSON.parse(req.body.details);
+   async.each(req.body.file, function (detail, callback) {
+     if (detail.username) {
+       connection.query('select * from subject where username = ? and sub_id = ?',[detail.username,subjectdetails.id],function (err,resu) {
+         if (err) {
+           callback(err);
+         } else {
+           if(resu.length === 1)
+           {
+             if(req.body.Cie == 1) {
+               connection.query('Insert into cie (theory,quiz,total) values (?,?,?)',[parseFloat(detail.theory),parseFloat(detail.quiz),parseFloat(detail.total)],function (err,results2) {
+                 if (err) {
+                   callback(err);
+                 } else {
+                  //results2.insertId
+                   connection.query('update subject set cie1 = ? where username = ? and sub_id = ?',[results2.insertId,detail.username,subjectdetails.id],function (err,results3) {
+                     if (err) {
+                       callback(err);
+                     } else {
+                       callback();
+                     }
+                   });
+                 }
+               });
+             } else if (req.body.Cie==2) {
+               connection.query('Insert into cie (theory,quiz,total) values (?,?,?)',[parseFloat(detail.theory),parseFloat(detail.quiz),parseFloat(detail.total)],function (err,results2) {
+                 if (err) {
+                   callback(err);
+                 } else {
+                   //results2.insertId
+                   connection.query('update subject set cie2 = ? where username = ? and sub_id = ?',[results2.insertId,detail.username,subjectdetails.id],function (err,results3) {
+                     if (err) {
+                       callback(err);
+                     } else {
+                       callback();
+                     }
+                   });
+                 }
+               });
+             } else {
+               connection.query('Insert into cie (theory,quiz,total) values (?,?,?)',[parseFloat(detail.theory),parseFloat(detail.quiz),parseFloat(detail.total)],function (err,results2) {
+                 if (err) {
+                   callback(err);
+               } else {
+                 //results2.insertId
+                   connection.query('update subject set cie3 = ? where username = ? and sub_id = ?',[results2.insertId,detail.username,subjectdetails.id],function (err,results3) {
+                     if (err) {
+                       callback(err);
+                     } else {
+                       callback();
+                     }
+                   });
+                 }
+               });
+             }
+             //ALREADY RECORDS EXISTS
+           } else {
+             if(req.body.Cie == 1) {
+               connection.query('Insert into cie (theory,quiz,total) values (?,?,?)',[parseFloat(detail.theory),parseFloat(detail.quiz),parseFloat(detail.total)],function (err,results2) {
+                 if (err) {
+                   callback(err);
+                 } else {
+                  //results2.insertId
+                   connection.query('Insert into subject (username,cie1,sem,sub_id) values (?,?,?,?)',[detail.username,results2.insertId,subjectdetails.semester,subjectdetails.id],function (err,results3) {
+                     if (err) {
+                       callback(err);
+                     } else {
+                       connection.query('Insert into teacher_subject (username,sub_details_id,sub_id) values (?,?,?)',[req.decoded.username,subjectdetails.id,results3.insertId],function (err,results4) {
+                         if (err) {
+                           callback(err)
+                         } else {
+                           callback();
+                         }
+                       });
+                     }
+                   });
+                 }
+               });
+             } else if (req.body.Cie==2) {
+               connection.query('Insert into cie (theory,quiz,total) values (?,?,?)',[parseFloat(detail.theory),parseFloat(detail.quiz),parseFloat(detail.total)],function (err,results2) {
+                 if (err) {
+                   callback(err);
+                 } else {
+                   //results2.insertId
+                   connection.query('Insert into subject (username,cie2,sem,sub_id) values (?,?,?,?)',[detail.username,results2.insertId,subjectdetails.semester,subjectdetails.id],function (err,results3) {
+                     if (err) {
+                       callback(err);
+                     } else {
+                       connection.query('Insert into teacher_subject (username,sub_details_id,sub_id) values (?,?,?)',[req.decoded.username,subjectdetails.id,results3.insertId],function (err,results4) {
+                         if (err) {
+                           callback(err)
+                         } else {
+                           callback();
+                         }
+                       });
+                     }
+                   });
+                 }
+               });
+             } else {
+               connection.query('Insert into cie (theory,quiz,total) values (?,?,?)',[parseFloat(detail.theory),parseFloat(detail.quiz),parseFloat(detail.total)],function (err,results2) {
+                 if (err) {
+                   callback(err);
+               } else {
+                 //results2.insertId
+                   connection.query('Insert into subject (username,cie3,sem,sub_id) values (?,?,?,?)',[detail.username,results2.insertId,subjectdetails.semester,subjectdetails.id],function (err,results3) {
+                     if (err) {
+                       callback(err);
+                     } else {
+                       connection.query('Insert into teacher_subject (username,sub_details_id,sub_id) values (?,?,?)',[req.decoded.username,subjectdetails.id,results3.insertId],function (err,results4) {
+                         if (err) {
+                           callback(err)
+                         } else {
+                           callback();
+                         }
+                       });
+                     }
+                   });
+                 }
+               });
+             }
+             //NO RECORDS
+           }
+          }
+       })
+     } else {
+       callback();
+     }
+ },function (err) {
+   if (err) {
+     res.json({success: false, message: err});
+   } else {
+     res.json({success: true, message: 'Successfully Updated the marks!!'});
+   }
+ });
+});
+
+// MULTIPLE QUERIES
+// var query = connection.query('Insert into subject (username,cie1,sem) values (?,?,?);Insert into teacher_subject (username,sub_details_id,sub_id) values (?,?,?)',[detail.username,results2.insertId,subjectdetails.semester,req.decoded.username,subjectdetails.id,results2.insertId]);
+// query
+//   .on('fields',function (fields, index) {
+//     console.log(fields,index);
+//   })
+//   .on('result',function (row,index) {
+//     console.log(row,index);
+//   });
+
+
+apiRoute.route('/getmarks')
+.all(verifyuser,verifystudent)
+.get(function (req,res) {
+  var payload= [[],[],[],[],[],[],[],[]];
+  connection.query('Select * from subject where username = ? ',[req.decoded.username],function (err,result) {
     if (err) {
-      res.json({ success: false, message: err });
-    } else if (!teacheruser) {
-      res.json({ success: false, message: 'Teacheruser not found!'});
+      res.json({success: false, message: err});
     } else {
-      var details = JSON.parse(req.body.details);
-      var sem = details.semester -1;
-      var pos = teacheruser.subjectdetails.map(function(e) { return e.Subcode; }).indexOf(details.Subcode);
-
-      // user.semesters[sem].Subjects  push the subject id
-      // teacheruser.subjectdetails[pos].Subjects  push the subject id
-      // save the subject student user and the teacher user atlast only once
-
-
-      async.each(req.body.file, function (detail, callback) {
-        if (detail.username) {
-          User.findOne({ username: detail.username }).select('semesters').exec(function (err, user) {
+      async.each(result,function (resu,callback) {
+        if (resu.id) {
+          var subject = [];
+          connection.query('select * from cie where cie_id in (?,?,?);select * from sub_details where id = ?',[resu.cie1,resu.cie2,resu.cie3,resu.sub_id],function (err,result1) {
             if (err) {
               callback(err);
-            } else if (!user) {
-              callback("User not found!");
             } else {
-              Subject.find({$and : [{studentid: user._id},{teacherid: teacheruser._id},{ Subcode: details.Subcode }]}).exec(function (err, sub) {
-                if (err) {
-                  callback(err);
-                } else if (sub.length === 0) {
-                  console.log("not found!");
-                  var subject = new Subject();
-                  subject.studentid = user._id;
-                  subject.teacherid = teacheruser._id;
-                  subject.Subname = details.Subname;
-                  subject.Subcode = details.Subcode;
-                  subject.CieMax = details.Max;
-                  var cie = {};
-                  cie.theory = parseFloat(detail.theory);
-                  cie.quiz = parseFloat(detail.quiz);
-                  cie.total = parseFloat(detail.total);
-                  cie.absent = false;
-                  cie.cienumber = req.body.Cie;
-                  user.semesters[sem].Subjects.push(subject._id);//Pushing in student
-                  subject.CieMarks.push(cie);
-                  teacheruser.subjectdetails[pos].Subjects.push(subject._id);//Pushing in teacher
-                  // Saving Student and subject
-                  subject.save(function (err) {
-                    if (err) {
-                      callback(err);
-                    } else {
-                      user.save(function (err) {
-                        if (err) {
-                          callback(err)
-                        } else {
-                          callback();
-                        }
-                      });
-                    }
-                  });
-                } else {
-                  console.log("FOUND!!");
-                  var cie = {};
-                  cie.theory = parseFloat(detail.theory);
-                  cie.quiz = parseFloat(detail.quiz);
-                  cie.total = parseFloat(detail.total);
-                  cie.absent = false;
-                  cie.cienumber = req.body.Cie;
-                  sub[0].CieMarks.push(cie);
-                  // Saving Student and subject
-                  sub[0].save(function (err) {
-                    if (err) {
-                      callback(err);
-                    } else {
-                      callback();
-                    }
-                  });
-                }
-              });
+              payload[resu.sem].push(result1);
+              callback();
             }
           });
         } else {
@@ -212,33 +305,12 @@ apiRoute.route('/updatemarks')
         }
       },function (err) {
         if (err) {
-          console.log(err);
-          res.json({ success: false, message: err });
+          res.json({success: false, message: err});
         } else {
-          teacheruser.save(function (err) {
-            if (err) {
-              res.json({ success: false, message: err });
-            } else {
-              res.json({ success: true, message: 'Updated marks successfully!'});
-            }
-          });
+          console.log(payload);
+          res.json({success: true, message: payload});
         }
-      });
-    }
-  });
-});
-
-
-
-
-apiRoute.route('/getmarks')
-.all(verifyuser,verifystudent)
-.get(function (req,res) {
-  User.findOne({ username:req.decoded.username }).select('semesters').populate('semesters.Subjects').exec(function (err,data) {
-    if (err) {
-      res.json({success: false, message: err });
-    } else {
-      res.json({success: true, message: data.semesters});
+      })
     }
   })
 });

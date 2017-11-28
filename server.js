@@ -7,6 +7,23 @@ var path        = require('path');
 var config      = require('./config');
 var port        = process.env.PORT || 8080;
 
+
+
+// 
+// var ConversationV1 = require('watson-developer-cloud/conversation/v1');
+// var conversation = new ConversationV1({
+//   username: '613d7a7a-90d3-47d3-a945-c3f3f35e595e', // replace with username from service key
+//   password: '3DLtt87nQqvH', // replace with password from service key
+//   path: { workspace_id: '5e1348a0-3326-4420-be8f-71b89c7fc44d' }, // replace with workspace ID
+//   version_date: '2017-05-26'
+// });
+
+
+
+
+
+
+
 // Routes
 var apiRoute = require('./backend/routes/api');
 var studentapiRoute = require('./backend/routes/studentapi');
@@ -30,6 +47,25 @@ mongoose.connect(config.mongoUrl,function (err) {
   }
 })
 
+
+//
+//
+//
+//
+// app.post('/test',function (req,res,next) {
+//   console.log(req.body);
+//   conversation.message({
+//     input: { text: req.body.message }
+//     }, function (err, response)  {
+//       if (err) {
+//         console.error(err);
+//         res.json({"message":err})
+//       }
+//       if (response.output.text.length != 0) {
+//           res.json({"message":response.output.text[0]});
+//       }
+//     })
+// })
 
 app.get('*',function (req,res) {
   res.sendFile(path.join(__dirname + '/public/app/views/index.html'));

@@ -4,7 +4,6 @@ angular.module('mainController',['authServices','userServices'])
 .controller('mainCtrl',['Auth','$scope','$location','$timeout','$rootScope','$window','$interval','User','AuthToken',function (Auth, $scope, $location,$timeout,$rootScope,$window,$interval,User,AuthToken) {
     var app = this;
     app.loadme = true;
-
     if( $window.location.pathname === '/') app.home = true;
 
     if (Auth.isLoggedIn()) {

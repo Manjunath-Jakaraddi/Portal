@@ -326,7 +326,7 @@ header {
     text-align: center;
     color: #fff;
     background-attachment: scroll;
-    background-image: url(../images/main.jpeg);
+    /*background-image: url(../images/main.jpeg);*/
     background-position: center center;
     background-repeat: none;
     -webkit-background-size: cover;
@@ -360,7 +360,7 @@ header .intro-text .intro-heading {
 @media(min-width:768px) {
     header .intro-text {
         padding-top: 300px;
-        padding-bottom: 200px;
+        padding-bottom: 20px;
     }
     header .intro-text .intro-lead-in {
         margin-bottom: 25px;
@@ -905,7 +905,7 @@ img::-moz-selection {
 
 body {
     webkit-tap-highlight-color: #1ee2e7;
-    background: #b4b9bb;
+    background: #F0F0F0
 }
 
 

@@ -8,7 +8,6 @@ var config      =   require('../../config');
 var jwt         =   require('jsonwebtoken');
 const async     =   require('async');
 
-
 var options = {
         service: 'Gmail',
         auth: {
@@ -16,6 +15,7 @@ var options = {
             pass: config.mailingcredentials.password
         }
 };
+
 var client = nodemailer.createTransport(options);
 
 

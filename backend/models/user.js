@@ -69,7 +69,10 @@ var passwordValidator = [
         message: 'Password should be between {ARGS[0]} and {ARGS[1]} characters'
     })
 ];
-
+var prodSchema = new Schema({
+  prodname  : {type: String},
+  quantity  : {type: String}
+})
 var UserSchema = new Schema({
   name            :     { type: String, default: false, validate: nameValidator},
   username        :     { type: String, required: true, unique: true, validate: usernameValidator},
@@ -79,9 +82,11 @@ var UserSchema = new Schema({
   registered      :     { type: Boolean, default: false },
   temporarytoken  :     { type: String, default: false},
   resettoken      :     { type: String },
-  permission      :     { type: String, default: 'student' },
-  semesters       :     [ SemSchema ],
-  subjectdetails  :     [ SubjectDetailsSchema ]
+  permission      :     { type: String, default: 'user' },
+  city            :     { type: String },
+  location        :     { type: String },
+  pincode         :     { type: String },
+  products        :     [prodSchema]
 });
 
 UserSchema.pre('save', function(next) {

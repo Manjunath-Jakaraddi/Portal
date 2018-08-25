@@ -41,7 +41,7 @@
     <!-- Favicon -->
     <link rel="icon" href="../../assets/images/favicon.ico">
 
-    <title>STUDENT Portal</title>
+    <title>TATA SAMPANN</title>
 
   </head>
 
@@ -59,7 +59,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand page-scroll" href="/">R V College of Engineering</a>
+          <a class="navbar-brand page-scroll" href="/">TATA SAMPANN</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -74,14 +74,20 @@
             <li>
                 <a ng-show="!main.isLoggedIn" class="page-scroll" href="/login">Login</a>
             </li>
-            <li>
+            <!-- <li>
                 <a ng-show="!main.isLoggedIn" class="page-scroll" href="/register">Register</a>
+            </li> -->
+            <li>
+                <a ng-show="!main.isLoggedIn" class="page-scroll" href="/usersregister">User</a>
             </li>
             <li>
-                <a ng-show="main.isLoggedIn" class="page-scroll" href="#" ng-click="main.logout();">Logout</a>
+                <a ng-show="!main.isLoggedIn" class="page-scroll" href="/retailersregister">Retailer</a>
             </li>
             <li>
-                <a ng-show="main.isLoggedIn" class="page-scroll" href="/profile">Profile</a>
+                <a ng-show="main.isLoggedIn&&main.authorized==='admin'" class="page-scroll" href="/additems">Add Items</a>
+            </li>
+            <li>
+                <a ng-show="main.isLoggedIn&&main.authorized==='admin'" class="page-scroll" href="/viewItems">View Items</a>
             </li>
             <li>
                 <a ng-show="main.isLoggedIn && main.authorized === 'student'" class="page-scroll" href="/student">student</a>
@@ -94,6 +100,21 @@
             </li>
             <li>
                 <a ng-show="main.isLoggedIn && main.authorized === 'teacher'" class="page-scroll" href="/teacher/createsubject">Create Subject</a>
+            </li>
+            <li>
+                <a ng-show="main.isLoggedIn && main.authorized === 'user'" class="page-scroll" href="/users/getretailers">Retailers</a>
+            </li>
+            <li>
+                <a ng-show="main.isLoggedIn && main.authorized === 'retailer'" class="page-scroll" href="/acceptRetailers">Request</a>
+            </li>
+            <!-- <li>
+                <a ng-show="main.isLoggedIn && main.authorized === 'retailer'" class="page-scroll" href="/displayinventory">Inventory</a>
+            </li> -->
+            <li>
+                <a ng-show="main.isLoggedIn" class="page-scroll" href="/profile">Profile</a>
+            </li>
+            <li>
+                <a ng-show="main.isLoggedIn" class="page-scroll" href="#" ng-click="main.logout();">Logout</a>
             </li>
           </ul>
         </div>
@@ -116,7 +137,7 @@
 
     <div class="carousel-inner">
       <div class="item active">
-        <img src="../../../assets/images/1.jpeg" alt="...">
+        <img src="../../../assets/images/photo2.jpg" alt="..." style="height:650px;width:1450px;">
         <div class="carousel-caption">
           <h3><header ng-show="main.home">
               <div class="intro-text">
@@ -130,7 +151,7 @@
         </div>
       </div>
       <div class="item">
-        <img src="../../../assets/images/2.jpeg" alt="...">
+        <img src="../../../assets/images/phtot-1.jpg" alt="..." style="height:650px;width:1450px;">
         <div class="carousel-caption">
           <h3><header ng-show="main.home">
               <div class="intro-text">
@@ -144,77 +165,7 @@
         </div>
       </div>
       <div class="item">
-        <img src="../../../assets/images/3.jpeg" alt="...">
-        <div class="carousel-caption">
-          <h3><header ng-show="main.home">
-              <div class="intro-text">
-                  <div class="intro-lead-in">&nbsp</div>
-                  <a ng-show="!main.isLoggedIn" href="/login" class="page-scroll btn btn-xl">Sign In</a>
-                  <a ng-show="!main.isLoggedIn" href="/register" class="page-scroll btn twitterbtn">Register</a>
-                  <a ng-show="main.isLoggedIn" href="#" ng-click="main.logout();" class="page-scroll btn btn-xl">Logout</a>
-                  <a ng-show="main.isLoggedIn" href="/management" class="page-scroll btn facebookbtn">View</a>
-              </div>
-          </header></h3>
-        </div>
-      </div>
-      <div class="item">
-        <img src="../../../assets/images/4.jpeg" alt="...">
-        <div class="carousel-caption">
-          <h3><header ng-show="main.home">
-              <div class="intro-text">
-                  <div class="intro-lead-in">&nbsp</div>
-                  <a ng-show="!main.isLoggedIn" href="/login" class="page-scroll btn btn-xl">Sign In</a>
-                  <a ng-show="!main.isLoggedIn" href="/register" class="page-scroll btn twitterbtn">Register</a>
-                  <a ng-show="main.isLoggedIn" href="#" ng-click="main.logout();" class="page-scroll btn btn-xl">Logout</a>
-                  <a ng-show="main.isLoggedIn" href="/management" class="page-scroll btn facebookbtn">View</a>
-              </div>
-          </header></h3>
-        </div>
-      </div>
-      <div class="item">
-        <img src="../../../assets/images/5.jpeg" alt="...">
-        <div class="carousel-caption">
-          <h3><header ng-show="main.home">
-              <div class="intro-text">
-                  <div class="intro-lead-in">&nbsp</div>
-                  <a ng-show="!main.isLoggedIn" href="/login" class="page-scroll btn btn-xl">Sign In</a>
-                  <a ng-show="!main.isLoggedIn" href="/register" class="page-scroll btn twitterbtn">Register</a>
-                  <a ng-show="main.isLoggedIn" href="#" ng-click="main.logout();" class="page-scroll btn btn-xl">Logout</a>
-                  <a ng-show="main.isLoggedIn" href="/management" class="page-scroll btn facebookbtn">View</a>
-              </div>
-          </header></h3>
-        </div>
-      </div>
-      <div class="item">
-        <img src="../../../assets/images/6.jpeg" alt="...">
-        <div class="carousel-caption">
-          <h3><header ng-show="main.home">
-              <div class="intro-text">
-                  <div class="intro-lead-in">&nbsp</div>
-                  <a ng-show="!main.isLoggedIn" href="/login" class="page-scroll btn btn-xl">Sign In</a>
-                  <a ng-show="!main.isLoggedIn" href="/register" class="page-scroll btn twitterbtn">Register</a>
-                  <a ng-show="main.isLoggedIn" href="#" ng-click="main.logout();" class="page-scroll btn btn-xl">Logout</a>
-                  <a ng-show="main.isLoggedIn" href="/management" class="page-scroll btn facebookbtn">View</a>
-              </div>
-          </header></h3>
-        </div>
-      </div>
-      <div class="item">
-        <img src="../../../assets/images/7.jpeg" alt="...">
-        <div class="carousel-caption">
-          <h3><header ng-show="main.home">
-              <div class="intro-text">
-                  <div class="intro-lead-in">&nbsp</div>
-                  <a ng-show="!main.isLoggedIn" href="/login" class="page-scroll btn btn-xl">Sign In</a>
-                  <a ng-show="!main.isLoggedIn" href="/register" class="page-scroll btn twitterbtn">Register</a>
-                  <a ng-show="main.isLoggedIn" href="#" ng-click="main.logout();" class="page-scroll btn btn-xl">Logout</a>
-                  <a ng-show="main.isLoggedIn" href="/management" class="page-scroll btn facebookbtn">View</a>
-              </div>
-          </header></h3>
-        </div>
-      </div>
-      <div class="item">
-        <img src="../../../assets/images/8.jpeg" alt="...">
+        <img src="../../../assets/images/photo-3.jpg" alt="..." style="height:650px;width:1450px;">
         <div class="carousel-caption">
           <h3><header ng-show="main.home">
               <div class="intro-text">

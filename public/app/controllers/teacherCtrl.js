@@ -81,4 +81,88 @@ angular.module('teacherController',['ngFileToJson','teacherServices'])
       },1500);
     });
   };
+}])
+.controller('getRetailCtrl',['User','Teacher','$location','$scope','$timeout',function (User,Teacher,$location,$timeout) {
+  var app = this;
+  app.loading = true;
+  app.accessDenied = true;
+  app.errorMsg = false;
+  app.editAccess = false;
+  app.deleteAccess = false;
+  app.limit = 10;
+  app.searchLimit = 0;
+  app.showbutton=true;
+  function getItems() {
+    app.loading = true;
+      User.getitems().then(function(data) {
+          if (data.data.success) {
+            console.log(data.data.message);
+            app.items=data.data.message;
+            app.loading=false;
+          } else {
+              app.errorMsg = data.data.message;
+              app.loading = false;
+          }
+      });
+  };
+  getItems();
+  // getProds();
+  //TODO getProds
+  app.showMore = function(number) {
+      app.showMoreError = false;
+
+      if (number > 0) {
+          app.limit = number;
+      } else {
+          app.showMoreError = 'Please enter a valid number';
+      }
+  };
+
+  app.showAll = function() {
+      app.limit = undefined;
+      app.showMoreError = false;
+  };
+
+
+
+  app.search = function(searchKeyword, number) {
+
+      if (searchKeyword) {
+
+          if (searchKeyword.length > 0) {
+              app.limit = 0;
+              $scope.searchFilter = searchKeyword;
+              app.limit = number;
+          } else {
+              $scope.searchFilter = undefined;
+              app.limit = 0;
+          }
+      } else {
+          $scope.searchFilter = undefined;
+          app.limit = 0;
+      }
+  };
+
+
+  app.clear = function() {
+      $scope.number = undefined;
+      app.limit = 0;
+      $scope.searchKeyword = undefined;
+      $scope.searchFilter = undefined;
+      app.showMoreError = false;
+  };
+  app.saveChanges=function (data) {
+    app.loading = true;
+    Teacher.requestitems(data).then(function (data) {
+      if (data.data.success) {
+        console.log(data.data.message);
+        app.items=data.data.message;
+        app.loading=false;
+        getItems();
+      } else {
+          app.errorMsg = data.data.message;
+          app.loading = false;
+      }
+    });
+  }
 }]);

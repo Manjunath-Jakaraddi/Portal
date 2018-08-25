@@ -15,6 +15,9 @@ angular.module('teacherServices',[])
   teacherFactory.updatemarks = function (payload) {
     return $http.post('/student/api/updatemarks',payload);
   }
-
+  // request items
+  teacherFactory.requestitems=function (invent) {
+    return $http.post('/student/api/requestitems',invent);
+  }
   return teacherFactory;
 }]);

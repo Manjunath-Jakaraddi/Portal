@@ -6,6 +6,7 @@ var jwt               =   require('jsonwebtoken');
 var SubjectModule     =   require('../models/subject.js');
 var User              =   require('../models/user.js');
 var teacher           =   require('../models/teacher.js');
+var Item           =   require('../models/Items.js');
 const async           =   require('async');
 var mysql             =  require('mysql');
 
@@ -47,7 +48,7 @@ var verifystudent = function (req, res, next) {
     if (err) {
       res.json({ success: false, message: err});
     } else if (user){
-      if ( user.permission !== 'student') {
+      if ( user.permission !== 'user') {
         res.json({ success: false, message: 'Insuffcient Permissions!'});
       } else {
         next();
@@ -62,7 +63,7 @@ var verifyteacher = function (req, res, next) {
     if (err) {
       res.json({ success: false, message: err});
     } else if (user) {
-      if ( user.permission !== 'teacher') {
+      if ( user.permission !== 'retailer') {
         res.json({ success: false, message: 'Insuffcient Permissions!'});
       } else {
         next();
@@ -280,7 +281,21 @@ apiRoute.route('/updatemarks')
 //     console.log(row,index);
 //   });
 
-
+apiRoute.route('/requestitems')
+.all(verifyuser,verifyteacher)
+.post(function (req,res,next) {
+  var ans = {quantity: req.body.quantity, prodname: req.body.itemname }
+  console.log(req.decoded.username);
+  User.update({username:req.decoded.username},{$set:{products:ans}},function (err,data) {
+    if(err) {
+      console.log(err);
+      res.json({success:false,message:err});
+    } else {
+      console.log(data);
+      res.json({success:true,message:"Requested successfully!!"});
+    }
+  });
+});
 apiRoute.route('/getmarks')
 .all(verifyuser,verifystudent)
 .get(function (req,res) {

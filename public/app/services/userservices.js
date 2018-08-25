@@ -75,6 +75,17 @@ angular.module('userServices',[])
     userFactory.createusers = function (user) {
       return $http.post('/api/createusers',user);
     }
-
+    // add items
+    userFactory.additems = function (itemdata) {
+      return $http.post('/api/itemscreate',itemdata);
+    }
+    // get items
+    userFactory.getitems = function () {
+      return $http.get('/api/getitems');
+    }
+    // navigate
+    userFactory.navigate = function (data) {
+      return $http.post('/api/getselected',data);
+    }
     return userFactory;
 }]);

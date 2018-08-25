@@ -6,6 +6,7 @@ var nodemailer  =   require('nodemailer');
 var sgTransport =   require('nodemailer-sendgrid-transport');
 var config      =   require('../../config');
 var jwt         =   require('jsonwebtoken');
+var Item           =   require('../models/Items.js');
 const async     =   require('async');
 
 var options = {
@@ -26,67 +27,43 @@ apiRoute.use(bodyParser.json());
 
 apiRoute.route('/users')
 .post(function (req, res, next) {
-  User.findOne({ username: req.body.username}).exec(function (err,user) {
-    if(err) {
-      res.json({ success: false, message: err});
-    } else if (user) {
-      user.name = req.body.name;
-      user.password = req.body.password;
+  console.log("asdfa");
+  if(req.body) {
+      var user = new User();
+      user.username = req.body.username;
+      user.name = req.body.firstName+' '+req.body.lastName;
       user.email = req.body.email;
-      user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, config.secretKey, { expiresIn: '24h' });
-      if (req.body.password === null || req.body.password === '' || req.body.email === null || req.body.email === '' || req.body.name === '' || req.body.name === null) {
-          res.json({ success: false, message: 'Ensure all fields have been provided'});
-      } else if (user.registered === true) {
-          res.json({ success: false, message: 'Account already registered!'});
-      } else  {
-        user.registered = true;
-        user.save(function(err) {
-                if (err) {
-                    if (err.errors !== undefined) {
-                        if (err.errors.name) {
-                            res.json({ success: false, message: err.errors.name.message });
-                        } else if (err.errors.email) {
-                            res.json({ success: false, message: err.errors.email.message });
-                        } else if (err.errors.password) {
-                            res.json({ success: false, message: err.errors.password.message });
-                        } else {
-                            res.json({ success: false, message: err });
-                        }
-                    } else if (err) {
-                        if (err.code == 11000) {
-                          if (err.errmsg.includes("username")) {
-                             res.json({ success: false, message: 'That username is already taken' });
-                           } else if (err.errmsg.includes("email")) {
-                                res.json({ success: false, message: 'That e-mail is already taken' });
-                            }
-                        } else {
-                            res.json({ success: false, message: err });
-                        }
-                    }
-                } else {
-                    var email = {
-                          from: 'manjunath180397@gmail.com',
-                          to: user.email,
-                          subject: 'Your Activation Link',
-                          text: 'Hello ' + user.name + ', thank you for registering at localhost.com. Please click on the following link to complete your activation: http://'+ config.URL + '/activate/' + user.temporarytoken,
-                          html: 'Hello<strong> ' + user.name + '</strong>,<br><br>Thank you for registering at '+ config.URL + '. Please click on the link below to complete your activation:<br><br><a href="http://'+ config.URL + '/activate/'+user.temporarytoken+'">http://'+ config.URL + '</a>'
-                    };
-                    client.sendMail(email, function(error, info){
-                          if(error){
-                              console.log(error);
-                          }else{
-                              console.log('Message sent: ' + info.response);
-                              console.log(user.email);
-                          };
-                    });
-                    res.json({ success: true, message: 'Account registered! Please check your e-mail for activation link.' });
-                }
-          });
+      user.registered = true;
+      user.active = false;
+      user.password = req.body.password;
+      user.location=req.body.location;
+      user.pincode=req.body.pincode;
+      user.city=req.body.city;
+      user.save(function (err,user) {
+      if(err) {
+        res.json({success: false,message: err});
+      } else {
+        var email = {
+              from: 'manjunath180397@gmail.com',
+              to: user.email,
+              subject: 'Your Activation Link',
+              text: 'Hello ' + user.name + ', thank you for registering at localhost.com. Please click on the following link to complete your activation: http://'+ config.URL + '/activate/' + user.temporarytoken,
+              html: 'Hello<strong> ' + user.name + '</strong>,<br><br>Thank you for registering at '+ config.URL + '. Please click on the link below to complete your activation:<br><br><a href="http://'+ config.URL + '/activate/'+user.temporarytoken+'">http://'+ config.URL + '</a>'
+        };
+        client.sendMail(email, function(error, info){
+              if(error){
+                  console.log(error);
+              }else{
+                  console.log('Message sent: ' + info.response);
+                  console.log(user.email);
+              };
+        });
+        res.json({ success: true, message: 'Account registered! Please check your e-mail for activation link.' });
       }
-    } else {
-      res.json({ success: false, message: 'USN not found!'});
-    }
-  });
+    });
+  } else {
+      res.json({success: false,message: 'No User data sent!!'});
+  }
 });
 
 
@@ -305,6 +282,7 @@ apiRoute.route('/resetpassword')
               if (err) {
                   res.json({ success: false, message: err});
               } else {
+                console.log(user.resettoken);
                   var email = {
                         from: 'manjunath180397@gmail.com',
                         to: user.email,
@@ -410,7 +388,7 @@ var verifystudent = function (req, res, next) {
       if (err) {
         res.json({ success: false, message: err});
       } else if (user){
-        if ( user.permission !== 'student') {
+        if ( user.permission !== 'user') {
           res.json({ success: false, message: 'Insuffcient Permissions!'});
         } else {
           next();
@@ -429,7 +407,7 @@ var verifyteacher = function (req, res, next) {
       if (err) {
         res.json({ success: false, message: err});
       } else if (user) {
-        if ( user.permission !== 'teacher') {
+        if ( user.permission !== 'retailer') {
           res.json({ success: false, message: 'Insuffcient Permissions!'});
         } else {
           next();
@@ -516,7 +494,48 @@ apiRoute.route('/management')
     }
   });
 });
-
+apiRoute.route('/itemscreate')
+.all(verifyuser,verifyadmin)
+.post(function(req,res,next) {
+  var item=new Item();
+  item.itemname=req.body.itemname;
+  item.ingrediants=req.body.ingrediants;
+  item.description=req.body.description;
+  item.imageurl=req.body.imageurl;
+  item.cost=req.body.cost;
+  item.offer=req.body.offer;
+  console.log(req.body.offer);
+  item.save(function (err,item) {
+    if(!err) {
+      res.json({success: false,message: err});
+    } else {
+    res.json({success: true, message: "Item added Successfully!"});
+  }
+});
+});
+apiRoute.route('/getitems')
+.all(verifyuser)
+.get(function (req,res,next) {
+  Item.find().exec(function (err,items) {
+    if(err) {
+      console.log(err);
+      res.json({success: false, message: err});
+    } else {
+      res.json({success: true, message: items});
+    }
+  })
+});
+apiRoute.route('/getselected')
+.all(verifyuser,verifystudent)
+.post(function (req,res,next) {
+  User.find({"products.prodname":req.body.prodname}).exec(function (err,users) {
+    if(err) {
+      res.json({success:false, message: err});
+    } else {
+      res.json({success:true,message: users});
+    }
+  });
+})
 apiRoute.route('/changePermission')
 .all(verifyuser,verifyadmin)
 .put(function (req, res) {

@@ -17,6 +17,7 @@
     "mysql": "^2.15.0",
     "nodemailer": "^4.0.1",
     "nodemailer-sendgrid-transport": "^0.2.0",
+    "twitter": "^1.7.1",
     "watson-developer-cloud": "^2.42.0"
   }
 }

@@ -1,0 +1,61 @@
+  <section id="contact">
+      <div class="container">
+
+
+          <div class="row">
+            <div class="col-lg-12">
+              <form name="createitem" id="contactForm" ng-submit="item.createitem(itemData,createitem.$valid);" novalidate>
+                <div class="row">
+                  <div class="col-lg-10 col-lg-offset-1">
+
+                    <div class="form-group">
+                      <label>Item Name:</label>
+                      <input ng-disabled="item.disabled" class="form-control" type="text" name="itemname" placeholder="Item Name *" ng-model="item.itemData.itemname" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Ingrediants:</label>
+                      <input ng-disabled="item.disabled" class="form-control" type="text" name="ingrediants" placeholder="Ingrediants *" ng-model="item.itemData.ingrediants" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Description:</label>
+                      <input ng-disabled="item.disabled" class="form-control" type="text" name="description" placeholder="Description *" ng-model="item.itemData.description" autocomplete="off">
+                    </div>
+
+
+                    <div class="form-group">
+                      <label>Image Url:</label>
+                      <input ng-disabled="item.disabled" class="form-control" type="text" name="imageurl" placeholder="Image Url *" ng-model="item.itemData.imageurl" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                      <div ng-class="{'has-success': (createitem.cost.$valid&&!createitem.cost.$pristine),'has-error':((!createitem.cost.$valid&&!createitem.cost.$pristine)||(!createitem.cost.$valid&&createitem.$submitted))}">
+                      <label>Cost:</label>
+                      <input ng-disabled="item.disabled" class="form-control" type="text" name="cost" placeholder="Cost *" ng-model="item.itemData.cost" autocomplete="off">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                      <label>Offer:</label>
+                      <input ng-disabled="item.disabled" class="form-control" type="text" name="offer" placeholder="Offer *" ng-model="item.itemData.offer" autocomplete="off">
+                    </div>
+                    <div class="clearfix"></div>
+                    <br>
+                  </div>
+                  <div class="">
+                    <button class="col-lg-4 col-lg-offset-4 btn btn-xl" type="submit" ng-disabled="item.disabled">Submit</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+      <br>
+      <br>
+      <div class="row show-hide-message" ng-show="item.successMsg || item.errorMsg">
+          <div class="col-lg-6 col-lg-offset-3">
+              <div ng-class="item.alert">{{ item.successMsg ||  item.errorMsg }}</div>
+          </div>
+      </div>
+  </section>
+</div>

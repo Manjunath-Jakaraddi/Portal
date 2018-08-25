@@ -21,6 +21,22 @@ var app = angular.module('AppRoutes',['ngRoute'])
       authenticated: false
     })
 
+    // Users Registration
+    .when('/usersregister',{
+      templateUrl: 'app/views/pages/users/usersregister.html',
+      controller: 'usersRegCtrl',
+      controllerAs: 'usersReg',
+      authenticated: false
+    })
+
+    // Retailers Registration
+    .when('/retailersregister',{
+      templateUrl: 'app/views/pages/users/retailersregister.html',
+      controller: 'retailRegCtrl',
+      controllerAs: 'retailReg',
+      authenticated: false
+    })
+
     // Route: User Login
     .when('/login',{
       templateUrl: 'app/views/pages/users/login.html',
@@ -79,7 +95,7 @@ var app = angular.module('AppRoutes',['ngRoute'])
         controller: 'studentCtrl',
         controllerAs: 'student',
         authenticated: true,
-        permission: 'student'
+        permission: 'user'
     })
 
     // Route: Teacher's Page
@@ -88,7 +104,7 @@ var app = angular.module('AppRoutes',['ngRoute'])
         controller: 'teacherCtrl',
         controllerAs: 'teacher',
         authenticated: true,
-        permission: 'teacher'
+        permission: 'retailer'
     })
     // Route: Teacher's Page
     .when('/teacher/createsubject', {
@@ -96,7 +112,7 @@ var app = angular.module('AppRoutes',['ngRoute'])
         controller: 'teacherCtrl',
         controllerAs: 'teacher',
         authenticated: true,
-        permission: 'teacher'
+        permission: 'retailer'
     })
 
     // Route: Management Page
@@ -107,7 +123,46 @@ var app = angular.module('AppRoutes',['ngRoute'])
         authenticated: true,
         permission: 'admin'
     })
-
+    // Add Items page
+    .when('/additems', {
+        templateUrl: 'app/views/pages/management/additems.html',
+        controller: 'itemsCtrl',
+        controllerAs: 'item',
+        authenticated: true,
+        permission: 'admin'
+    })
+    // View items
+    .when('/viewItems', {
+        templateUrl: 'app/views/pages/management/viewItems.html',
+        controller: 'viewCtrl',
+        controllerAs: 'view',
+        authenticated: true,
+        permission: 'admin'
+    })
+    // retailers
+    .when('/users/getretailers', {
+        templateUrl: 'app/views/pages/student/getRetailers.html',
+        controller: 'getRetailctrl',
+        controllerAs: 'retail',
+        authenticated: true,
+        permission: 'user'
+    })
+    // accept retailers
+    .when('/acceptRetailers',{
+      templateUrl: 'app/views/pages/teacher/acceptretailers.html',
+      controller: 'getRetailCtrl',
+      controllerAs: 'retail',
+      authenticated: true,
+      permission: 'retailer'
+    })
+    // display inventory
+    .when('/displayinventory',{
+      templateUrl: 'app/views/pages/teacher/displayinventory.html',
+      controller: 'getRetailCtrl',
+      controllerAs: 'invent',
+      authenticated: true,
+      permission: 'retailer'
+    })
     .otherwise({ redirectTo: '/' });
     $locationProvider.html5Mode({ enabled: true, requireBase: false });
 }]);

@@ -5,11 +5,11 @@ var mongoose    = require('mongoose');
 var bodyParser  = require('body-parser');
 var path        = require('path');
 var config      = require('./config');
-var port        = process.env.PORT || 8080;
+var port        = 8000;
 
 
 
-// 
+//
 // var ConversationV1 = require('watson-developer-cloud/conversation/v1');
 // var conversation = new ConversationV1({
 //   username: '613d7a7a-90d3-47d3-a945-c3f3f35e595e', // replace with username from service key

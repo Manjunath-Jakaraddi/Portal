@@ -1,0 +1,31 @@
+<div class="container">
+   <div class=well>
+      <form ng-submit="question.add_question(question.ques)">
+      <h3 style="text-align:center;" >Any Queries ????</h3><br> &nbsp;&nbsp;
+      <textarea type="text"  ng-model="question.ques" style="border:1px solid grey;" rows="4" cols="75" placeholder="Ask question here" required></textarea>
+      <button class="cta-button btn btn-lg  btn-danger" style="margin-left:80px;margin-bottom:55px;" type="submit">Go for It!</button>
+      </button>
+      </form>
+   </div>
+ <div class="well">
+   <!-- <input type='text' ng-model='searchcity' style="width:250px" placeholder="Search queries based on location " /> -->
+
+   <form ng-submit="question.add_answer(question.answ ,question.item)"
+    <div class="bs-calltoaction bs-calltoaction-default" ng-repeat="item in question.question_data ">
+        <div class="row" ng-show="item.Chat">
+           {{item.city}}{{item.location}}{{item.pinCode}}
+            <div class="col-md-9 cta-contents">
+                  <div><h1>{{item.Chat.question}}<h6>- {{item.username}}</h6></h1></div>
+                <div class="cta-desc" ng-repeat="src in item.answer track by $index">
+                    <p>{{item.answer[$index].ans}} - {{item.answer[$index].username}}</p>
+                </div>
+            </div>
+            <div class="col-md-3 cta-button">ANSWER HERE
+                <textarea type="text"  ng-model="question.answ" rows="4" cols="50" style="border:1px solid black;" required></textarea>
+                <button type="submit" class="btn btn-lg btn-block btn-default">Answer</button>
+            </div>
+         </div>
+    </div>
+</form>
+</div>
+</div>

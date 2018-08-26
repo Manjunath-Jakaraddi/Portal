@@ -82,6 +82,47 @@ angular.module('teacherController',['ngFileToJson','teacherServices'])
     });
   };
 }])
+.controller('questionCtrl',['User','Teacher','$location','$scope','$timeout','$http',function (User,Teacher,$location,$timeout,$http) {
+  var app=this;
+  app.chatportal = {};
+  app.ques = " ";
+  app.answ = "  ";
+  app.question_object = {};
+  app.answer_object = {};
+  app.question_data = {};
+  app.answer_data = {};
+  function getQuestions() {
+    User.getQuestion().then(function (data) {
+      if(data.data.success)
+      {
+        console.log(data.data.message);
+        app.question_data=data.data.message;
+      }
+      else {
+        console.log(data.data.message);
+      }
+    })
+  }
+  getQuestions();
+  app.add_question = function(ques) {
+    User.addQuestion({question: ques}).then(function (data) {
+      if(!data.data.success) {
+        console.log(data.data.message);
+        getQuestions();
+      }
+    })
+  };
+
+  app.add_answer = function(answ,item) {
+    User.ansQuestion({answer:answ}).then(function (data) {
+      if(!data.data.success)
+      {
+        console.log(data.data.message);
+          getQuestions();
+      }
+    })
+}
+}])
 .controller('getRetailCtrl',['User','Teacher','$location','$scope','$timeout',function (User,Teacher,$location,$timeout) {
   var app = this;
   app.loading = true;
@@ -131,24 +172,24 @@ angular.module('teacherController',['ngFileToJson','teacherServices'])
 
           if (searchKeyword.length > 0) {
               app.limit = 0;
-              $scope.searchFilter = searchKeyword;
+              app.searchFilter = searchKeyword;
               app.limit = number;
           } else {
-              $scope.searchFilter = undefined;
+              app.searchFilter = undefined;
               app.limit = 0;
           }
       } else {
-          $scope.searchFilter = undefined;
+          app.searchFilter = undefined;
           app.limit = 0;
       }
   };
 
 
   app.clear = function() {
-      $scope.number = undefined;
+      app.number = undefined;
       app.limit = 0;
-      $scope.searchKeyword = undefined;
-      $scope.searchFilter = undefined;
+      app.searchKeyword = undefined;
+      app.searchFilter = undefined;
       app.showMoreError = false;
   };
   app.saveChanges=function (data) {

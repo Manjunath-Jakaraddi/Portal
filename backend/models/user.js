@@ -72,7 +72,15 @@ var passwordValidator = [
 var prodSchema = new Schema({
   prodname  : {type: String},
   quantity  : {type: String}
-})
+});
+var answers = new Schema({
+  username: String,
+  ans: String
+});
+var ChatSchema = new Schema({
+  question : String,
+  answer      : [answers]
+});
 var UserSchema = new Schema({
   name            :     { type: String, default: false, validate: nameValidator},
   username        :     { type: String, required: true, unique: true, validate: usernameValidator},
@@ -86,7 +94,8 @@ var UserSchema = new Schema({
   city            :     { type: String },
   location        :     { type: String },
   pincode         :     { type: String },
-  products        :     [prodSchema]
+  products        :     [prodSchema],
+  Chat            :     ChatSchema
 });
 
 UserSchema.pre('save', function(next) {
@@ -107,5 +116,4 @@ UserSchema.plugin(titlize, {
 UserSchema.methods.comparePassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 };
-
 module.exports = mongoose.model('User',UserSchema);

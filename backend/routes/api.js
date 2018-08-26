@@ -1,6 +1,7 @@
 var express     =   require('express')
 var bodyParser  =   require('body-parser');
 var mongoose    =   require('mongoose');
+var Schema            =     mongoose.Schema;
 var User        =   require('../models/user');
 var nodemailer  =   require('nodemailer');
 var sgTransport =   require('nodemailer-sendgrid-transport');
@@ -8,6 +9,8 @@ var config      =   require('../../config');
 var jwt         =   require('jsonwebtoken');
 var Item           =   require('../models/Items.js');
 const async     =   require('async');
+var fs = require('fs');
+var twitter = require('twitter');
 
 var options = {
         service: 'Gmail',
@@ -525,6 +528,98 @@ apiRoute.route('/getitems')
     }
   })
 });
+var twitter_client = new twitter({
+  consumer_key: 'jlqQuilIJeMjCPfA22ofW9jMo',
+  consumer_secret: 'V0ttuk9wBHROg3Jw6wbes1Glws5tXmnu3uPGsATtIKuhWJYgz6',
+  access_token_key: '1033348692651036677-1Zz9eAWtQtFxDDOJmvUlHlGDcNc51C',
+  access_token_secret: 'VyPaJiMvWktBA8pr404r1R76lyM0Euy98TFMTZUFL4HlE'
+});
+apiRoute.route('/get_influencers')
+.all(verifyuser,verifyadmin)
+.post(function (req,res,next) {
+  var tag = req.body.hashtag;
+   var location = req.body.city;
+   var query = "#"+tag+" #"+location;
+   var response_object = {};
+   var result = []
+  twitter_client.get('search/tweets', {q:query}, function(error, tweets, response) {
+    if(error){
+      console.log(error);
+      res.status(404).send({ success: false, reason:"Failed to get tweets"});
+       }
+     else {
+       tweets.statuses.forEach(function(tweet) {
+       response_object.social_url    = tweet.user.url;
+       response_object.profile_image = tweet.user.profile_image_url;
+       response_object.name          = tweet.user.name;
+       response_object.screen_name   = tweet.user.screen_name;
+       // console.log(response_object);
+       result.push(response_object);
+       response_object = {}
+       })
+       console.log(result);
+       res.status(200).send({ success: true, reason:result});
+      }
+  });
+});
+var answers = new Schema({
+  username: String,
+  ans: String
+});
+var ChatSchema = new Schema({
+  question : String,
+  answer      : [answers]
+});
+apiRoute.route('/add_questions')
+.all(verifyuser,verifyteacher)
+.post(function (req,res,next) {
+  var chat = {
+    question : req.body.question,
+    answer : []
+  }
+  User.update({username:req.decoded.username},{$set:{Chat:chat}}).exec(function (err,user) {
+    if(err) console.log(err);
+    res.json({success:true});
+  });
+});
+apiRoute.route('/get_questions')
+.all(verifyuser,verifyteacher)
+.get(function (req,res,next) {
+  User.find().exec(function (err,user) {
+    if(err) {
+      console.log(err);
+      res.json({success:false,message:err});
+    } else {
+      console.log(user);
+      res.json({success:true,message: user})
+    }
+  });
+});
+apiRoute.route('/answer_questions')
+.all(verifyuser,verifyteacher)
+.post(function (req,res,next) {
+var resu={
+  username:req.decoded.username,
+  ans:req.body.answer
+};
+// resu.username=req.decoded.username;
+// resu.ans=req.body.answer;
+console.log(resu);
+  User.find({username:req.decoded.username}).exec(function (err,user) {
+  
+    console.log(user);
+    user.update({username:req.decoded.username},{$push:{}},function (err,user) {
+      if(err) {
+        console.log(err);
+        res.json({success:false,message:err});
+      } else {
+        res.json({success:true,message:"pushed answer"});
+      }
+
+    });
+  });
+});
+
 apiRoute.route('/getselected')
 .all(verifyuser,verifystudent)
 .post(function (req,res,next) {

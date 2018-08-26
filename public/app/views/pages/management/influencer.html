@@ -1,0 +1,36 @@
+
+<div class="container">
+   <div class="well col-md-offset-1">
+      <form ng-submit = "influence.get_influencers(influence.hash,influence.cit)">
+      <h3 style="text-align:center"><u>Search Influencers</u> </h3>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      TOPIC: <input type="text" ng-model = "influence.hash" style="border:1px solid grey;"></input>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      LOCATION: <input type="text" ng-model = "influence.cit" style="border:1px solid grey;"></input>
+      &nbsp;&nbsp;&nbsp;<button class="cta-button btn btn-lg  btn-default"  type="submit">Search</button>
+   </form>
+   </div>
+   <!-- {{influs1} -->
+   <!-- <div ng-repeat = "item in influs">
+      {{item}}
+   </div> -->
+   <div class="bs-calltoaction bs-calltoaction-default" style="text-align: center;width:60%" ng-repeat="item in influence.influs ">
+      <div class="row col-md-offset-4">
+           <div class="col-md-6 cta-contents">
+             <!-- {{item}} -->
+             <div ><img style="height:150px;width:150px;" src="{{item.profile_image}}"></div>
+
+                 <!-- <div ><img style="height:150px;width:150px;" src="http://profilepicturesdp.com/wp-content/uploads/2018/06/default-user-profile-picture-6.png"></div> -->
+                 <br>
+           </div>
+           <div class="col-md-6 cta-button">
+             <p>Name - {{item.name}}</p>
+             <p>Social_handle - {{item.screen_name}}<p>
+             <p ng-show="item.social_url">Contact - <a  href="{{item.social_url}}"> link</a></p>
+           </div>
+        </div>
+   </div>
+   <!-- {{influs}} -->
+</div>

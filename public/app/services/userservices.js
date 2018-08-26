@@ -87,5 +87,17 @@ angular.module('userServices',[])
     userFactory.navigate = function (data) {
       return $http.post('/api/getselected',data);
     }
+    //add questions
+    userFactory.addQuestion = function (data) {
+      return $http.post('/api/add_questions',data);
+    }
+    // get_questions
+    userFactory.getQuestion = function () {
+      return $http.get('/api/get_questions');
+    }
+    // answer_questions
+    userFactory.ansQuestion = function (data) {
+      return $http.post('/api/answer_questions',data);
+    }
     return userFactory;
 }]);

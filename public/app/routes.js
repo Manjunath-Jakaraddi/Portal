@@ -131,6 +131,14 @@ var app = angular.module('AppRoutes',['ngRoute'])
         authenticated: true,
         permission: 'admin'
     })
+    // influencers
+    .when('/influencers', {
+        templateUrl: 'app/views/pages/management/influencer.html',
+        controller: 'influencerCtrl',
+        controllerAs: 'influence',
+        authenticated: true,
+        permission: 'admin'
+    })
     // View items
     .when('/viewItems', {
         templateUrl: 'app/views/pages/management/viewItems.html',
@@ -152,6 +160,14 @@ var app = angular.module('AppRoutes',['ngRoute'])
       templateUrl: 'app/views/pages/teacher/acceptretailers.html',
       controller: 'getRetailCtrl',
       controllerAs: 'retail',
+      authenticated: true,
+      permission: 'retailer'
+    })
+    // Question
+    .when('/question',{
+      templateUrl: 'app/views/pages/teacher/question.html',
+      controller: 'questionCtrl',
+      controllerAs: 'question',
       authenticated: true,
       permission: 'retailer'
     })

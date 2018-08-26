@@ -57,24 +57,24 @@ angular.module('managementController', [])
 
             if (searchKeyword.length > 0) {
                 app.limit = 0;
-                $scope.searchFilter = searchKeyword;
+                app.searchFilter = searchKeyword;
                 app.limit = number;
             } else {
-                $scope.searchFilter = undefined;
+                app.searchFilter = undefined;
                 app.limit = 0;
             }
         } else {
-            $scope.searchFilter = undefined;
+            app.searchFilter = undefined;
             app.limit = 0;
         }
     };
 
 
     app.clear = function() {
-        $scope.number = undefined;
+        app.number = undefined;
         app.limit = 0;
-        $scope.searchKeyword = undefined;
-        $scope.searchFilter = undefined;
+        app.searchKeyword = undefined;
+        app.searchFilter = undefined;
         app.showMoreError = false;
     };
 
@@ -158,28 +158,53 @@ angular.module('managementController', [])
 
           if (searchKeyword.length > 0) {
               app.limit = 0;
-              $scope.searchFilter = searchKeyword;
+              app.searchFilter = searchKeyword;
               app.limit = number;
           } else {
-              $scope.searchFilter = undefined;
+              app.searchFilter = undefined;
               app.limit = 0;
           }
       } else {
-          $scope.searchFilter = undefined;
+          app.searchFilter = undefined;
           app.limit = 0;
       }
   };
 
 
   app.clear = function() {
-      $scope.number = undefined;
+      app.number = undefined;
       app.limit = 0;
-      $scope.searchKeyword = undefined;
-      $scope.searchFilter = undefined;
+      app.searchKeyword = undefined;
+      app.searchFilter = undefined;
       app.showMoreError = false;
   };
 }])
+.controller('influencerCtrl',['User','$scope','$timeout','$http',function (User,$scope,$timeout,$http) {
+  var app=this;
+  app.hash = " ";
+app.cit = " ";
+app.get_influencers = function(hash,cit){
+  console.log(hash,cit);
+app.influs= [];
+app.profile_image = "http://profilepicturesdp.com/wp-content/uploads/2018/06/default-user-profile-picture-6.png";
+  $http({
+    url: '/api/get_influencers',
+    method: 'post',
+    data: {hashtag:hash,city:cit}
+  }).then(function(data){
+    if(data.data.success){
+      // alert("Receieved influncers");
+      app.influs = data.data.reason;
+  }
+  else {
+    alert(data.data.reason);
+  }
+  },function(err){
+    alert("Failed to add");
+  })
 
+}
+}])
 .controller('itemsCtrl', ['User','$scope','$timeout',function(User, $scope, $timeout) {
     var app = this;
 

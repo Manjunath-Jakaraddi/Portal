@@ -4,7 +4,7 @@
     "async": "^2.5.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
-    "csv-parse": "^1.2.0",
+    "csv-parse": "^4.4.6",
     "express": "^4.15.3",
     "file-system": "^2.2.2",
     "json-web-token": "^2.1.3",

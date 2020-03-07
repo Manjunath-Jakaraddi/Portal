@@ -82,6 +82,8 @@ var UserSchema = new Schema({
   permission      :     { type: String, default: 'student' },
   semesters       :     [ SemSchema ],
   subjectdetails  :     [ SubjectDetailsSchema ]
+}, {
+  usePushEach: true
 });
 
 UserSchema.pre('save', function(next) {

@@ -22,7 +22,7 @@ app.use('/student/api',studentapiRoute);
 
 // CONNECTING TO MONGODB
 mongoose.Promise = global.Promise;
-mongoose.connect(config.mongoUrl,function (err) {
+mongoose.connect(config.mongoUrl, { useMongoClient: true}, function (err) {
   if(err) {
     console.log('Not Successfully connected to database ' + err);
   } else {

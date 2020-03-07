@@ -1,11 +1,12 @@
 module.exports = {
-  'mongoUrl'            :   'mongodb://localhost:27017/manju',
+  'mongoUrl'            :   'mongodb://dbuser:Manju%40123@manjudb-shard-00-00-skuix.mongodb.net:27017,manjudb-shard-00-01-skuix.mongodb.net:27017,manjudb-shard-00-02-skuix.mongodb.net:27017/manju?ssl=true&replicaSet=manjudb-shard-0&authSource=admin&retryWrites=true&w=majority',
   'secretKey'           :   '12345-67890-09876-54321',
   'mailingcredentials'  :   { 'email': 'manjunath180397@gmail.com', 'password': 'Manju@180397'},
   'URL'                 :   'evening-escarpment-52396.herokuapp.com'
   // evening-escarpment-52396.herokuapp.com
   // 'mongodb://localhost:27017/manju'
   // 'mongodb://manju:manju@ds151062.mlab.com:51062/manjurvce'
+  // mongodb+srv://dbuser:<password>@manjudb-skuix.mongodb.net/test?retryWrites=true&w=majority
   // 'localhost:8080'
 }
 
